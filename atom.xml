@@ -4,7 +4,7 @@
   <subtitle><![CDATA[hello world, hello 多肉]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://elevensky.github.io/"/>
-  <updated>2015-02-12T14:46:41.832Z</updated>
+  <updated>2015-02-13T02:34:52.808Z</updated>
   <id>http://elevensky.github.io/</id>
   
   <author>
@@ -19,11 +19,10 @@
     <link href="http://elevensky.github.io/2015/02/11/%E6%88%91%E7%9A%842014/"/>
     <id>http://elevensky.github.io/2015/02/11/我的2014/</id>
     <published>2015-02-11T06:06:35.000Z</published>
-    <updated>2015-02-12T14:37:48.000Z</updated>
+    <updated>2015-02-13T02:29:10.000Z</updated>
     <content type="html"><![CDATA[<h2 id="2014年对我来说真的不一样">2014年对我来说真的不一样</h2>
 <p>2014年是很受伤的一年，我就不在这里诉苦了。</p>
-<p>说说今年的一些计划，作为一个前端从业者，越来越感受到技术的紧迫性。<br>随着前端在整个行业领域的日益凸显，这个行业的技术无论从深度，广度上都在日益的重度加重当中。<br>作为在这个领域底层摸爬滚打的人，我深深感觉到自己的不足，甚至一度怀疑自己是否真的擅长做这个。<br>我一直以来都不是一个妄自菲薄和狂妄自大的人。走到今天，我已经深知自己是一个有自知之明的人。</p>
-<p>虽然痛苦迷茫失落了2014年，但是毕竟自己一踏入职场便选择的这个行业。</p>
+<p>说说今年的一些计划，作为一个前端从业者，越来越感受到技术的紧迫性。<br>随着前端在整个行业领域的日益凸显，这个行业的技术无论从深度，广度上都在日益的重度加重当中。<br>作为在这个领域底层摸爬滚打的人，我深深感觉到自己的不足，甚至一度怀疑自己是否真的擅长做这个。<br>我一直以来都不是一个妄自菲薄和狂妄自大的人。走到今天，我已经深知自己是一个有自知之明的人。<br><a id="more"></a><br>虽然痛苦迷茫失落了2014年，但是毕竟自己一踏入职场便选择的这个行业。</p>
 <p>今年初步需要掌握的一些技术</p>
 <h3 id="javascript">javascript</h3>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Nodejs+express+angularjs+mongodb</div><div class="line"></div><div class="line">glup，grunt</div><div class="line"></div><div class="line">html5</div></pre></td></tr></table></figure>
@@ -34,7 +33,8 @@
     <summary type="html">
     <![CDATA[<h2 id="2014年对我来说真的不一样">2014年对我来说真的不一样</h2>
 <p>2014年是很受伤的一年，我就不在这里诉苦了。</p>
-<p>说说今年的一些计划，作为一个前端从业者，越来越感受到技术的紧迫性。<br>随着前端在整个行业领域的日益凸显，这个行业的技术无]]>
+<p>说说今年的一些计划，作为一个前端从业者，越来越感受到技术的紧迫性。<br>随着前端在整个行业领域的日益凸显，这个行业的技术无论从深度，广度上都在日益的重度加重当中。<br>作为在这个领域底层摸爬滚打的人，我深深感觉到自己的不足，甚至一度怀疑自己是否真的擅长做这个。<br>我一直以来都不是一个妄自菲薄和狂妄自大的人。走到今天，我已经深知自己是一个有自知之明的人。<br>]]>
+    
     </summary>
     
       <category term="life" scheme="http://elevensky.github.io/tags/life/"/>
