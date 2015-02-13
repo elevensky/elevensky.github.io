@@ -4,7 +4,7 @@
   <subtitle><![CDATA[hello world, hello 多肉]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://elevensky.github.io/"/>
-  <updated>2015-02-13T02:34:52.808Z</updated>
+  <updated>2015-02-13T03:37:32.686Z</updated>
   <id>http://elevensky.github.io/</id>
   
   <author>
@@ -15,13 +15,12 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[我的2014]]></title>
+    <title><![CDATA[2014年技术战略]]></title>
     <link href="http://elevensky.github.io/2015/02/11/%E6%88%91%E7%9A%842014/"/>
     <id>http://elevensky.github.io/2015/02/11/我的2014/</id>
     <published>2015-02-11T06:06:35.000Z</published>
-    <updated>2015-02-13T02:29:10.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="2014年对我来说真的不一样">2014年对我来说真的不一样</h2>
-<p>2014年是很受伤的一年，我就不在这里诉苦了。</p>
+    <updated>2015-02-13T03:13:13.000Z</updated>
+    <content type="html"><![CDATA[<p>2014年是很受伤的一年，我就不在这里诉苦了。</p>
 <p>说说今年的一些计划，作为一个前端从业者，越来越感受到技术的紧迫性。<br>随着前端在整个行业领域的日益凸显，这个行业的技术无论从深度，广度上都在日益的重度加重当中。<br>作为在这个领域底层摸爬滚打的人，我深深感觉到自己的不足，甚至一度怀疑自己是否真的擅长做这个。<br>我一直以来都不是一个妄自菲薄和狂妄自大的人。走到今天，我已经深知自己是一个有自知之明的人。<br><a id="more"></a><br>虽然痛苦迷茫失落了2014年，但是毕竟自己一踏入职场便选择的这个行业。</p>
 <p>今年初步需要掌握的一些技术</p>
 <h3 id="javascript">javascript</h3>
@@ -31,8 +30,7 @@
 <p>一定要成功啊，fuck do it.</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h2 id="2014年对我来说真的不一样">2014年对我来说真的不一样</h2>
-<p>2014年是很受伤的一年，我就不在这里诉苦了。</p>
+    <![CDATA[<p>2014年是很受伤的一年，我就不在这里诉苦了。</p>
 <p>说说今年的一些计划，作为一个前端从业者，越来越感受到技术的紧迫性。<br>随着前端在整个行业领域的日益凸显，这个行业的技术无论从深度，广度上都在日益的重度加重当中。<br>作为在这个领域底层摸爬滚打的人，我深深感觉到自己的不足，甚至一度怀疑自己是否真的擅长做这个。<br>我一直以来都不是一个妄自菲薄和狂妄自大的人。走到今天，我已经深知自己是一个有自知之明的人。<br>]]>
     
     </summary>
