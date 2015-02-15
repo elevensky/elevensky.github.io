@@ -9,10 +9,14 @@
     
     <meta name="author" content="elevensky">
     
-    <meta name="description" content="Gulp与Grunt一样，也是一个自动任务运行器。它充分借鉴了Unix操作系统的管道（pipe）思想，很多人认为，在操作上，它要比Grunt简单。
+    <meta name="description" content="gulp介绍
+Gulp与Grunt一样，也是一个自动任务运行器。它充分借鉴了Unix操作系统的管道（pipe）思想，很多人认为，在操作上，它要比Grunt简单。
+Gulp是基于Node.js构建的，因此Gulp源文件和你用来定义任务的Gulp文件都被写进了JavaScript（或者CoffeeScript）里。前端开发工程师还可以用自己熟悉的语言来编写任务去lint JavaScript和CSS、解析模板以及在文件变动时编译LESS文件（当然这些只是一小部分例子）。
+Gulp本身虽然不能完成很多任务，但它有大量插件可用，开发者可以访问插件页面或者在npm搜索gulpplugin就能看到。例如，有些插件可以用来执行JSHint、编译CoffeeScript，执行Mocha测试，甚至更新版本号。
+对比其他构建工具，比如Grunt，以及最近流行的Broccoli，我相信Gulp会更胜一筹（请看后面的”Why Gulp?”部分），同时我汇总了一个使用Javascript编写的构建工具清单，可供大家参考。
+Gulp是一个可以在GitHub上找到的开源项目。
 安装
-Gulp需要全局安装，然后再在项目的开发目录中安装为本地模块。先进入项目目录，运行下面的命令。
-1234npm install -g gulpnpm install --save-dev gulp">
+Gulp需要全局安装，然后再在项目的开发目录中安装为本地模块。先进入项目目录，运行下面的命令。">
     
     
     
@@ -83,7 +87,7 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
     </p>
   <p class="article-time">
     <time datetime="2015-02-14T14:22:19.000Z" itemprop="datePublished">2月 14 2015</time>
-    更新日期:<time datetime="2015-02-14T15:35:07.000Z" itemprop="dateModified">2月 14 2015</time>
+    更新日期:<time datetime="2015-02-15T03:07:34.000Z" itemprop="dateModified">2月 15 2015</time>
     
   </p>
 </header>
@@ -92,15 +96,20 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulpfile-js"><span class="toc-number">2.</span> <span class="toc-text">gulpfile.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-src()"><span class="toc-number">3.</span> <span class="toc-text">gulp.src()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-task()"><span class="toc-number">4.</span> <span class="toc-text">gulp.task()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-watch()"><span class="toc-number">5.</span> <span class="toc-text">gulp.watch()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-load-plugins模块"><span class="toc-number">6.</span> <span class="toc-text">gulp-load-plugins模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-livereload模块"><span class="toc-number">7.</span> <span class="toc-text">gulp-livereload模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">8.</span> <span class="toc-text">参考链接</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp介绍"><span class="toc-number">1.</span> <span class="toc-text">gulp介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulpfile-js"><span class="toc-number">3.</span> <span class="toc-text">gulpfile.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-src()"><span class="toc-number">4.</span> <span class="toc-text">gulp.src()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-task()"><span class="toc-number">5.</span> <span class="toc-text">gulp.task()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-watch()"><span class="toc-number">6.</span> <span class="toc-text">gulp.watch()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-load-plugins模块"><span class="toc-number">7.</span> <span class="toc-text">gulp-load-plugins模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-livereload模块"><span class="toc-number">8.</span> <span class="toc-text">gulp-livereload模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">9.</span> <span class="toc-text">参考链接</span></a></li></ol>
 		</div>
 		
-		<p>Gulp与Grunt一样，也是一个自动任务运行器。它充分借鉴了Unix操作系统的管道（pipe）思想，很多人认为，在操作上，它要比Grunt简单。</p>
+		<h2 id="gulp介绍">gulp介绍</h2>
+<p>Gulp与Grunt一样，也是一个自动任务运行器。它充分借鉴了Unix操作系统的管道（pipe）思想，很多人认为，在操作上，它要比Grunt简单。</p>
+<p>Gulp是基于Node.js构建的，因此Gulp源文件和你用来定义任务的Gulp文件都被写进了JavaScript（或者CoffeeScript）里。前端开发工程师还可以用自己熟悉的语言来编写任务去lint JavaScript和CSS、解析模板以及在文件变动时编译LESS文件（当然这些只是一小部分例子）。</p>
+<p>Gulp本身虽然不能完成很多任务，但它有大量插件可用，开发者可以访问插件页面或者在npm搜索gulpplugin就能看到。例如，有些插件可以用来执行<a href="https://www.npmjs.org/package/gulp-jshint/" target="_blank" rel="external">JSHint</a>、<a href="https://www.npmjs.org/package/gulp-coffee/" target="_blank" rel="external">编译CoffeeScript</a>，<a href="http://npmjs.org/package/gulp-mocha" target="_blank" rel="external">执行Mocha</a>测试，甚至更新版本号。</p>
+<p>对比其他构建工具，比如<a href="http://gruntjs.com/" target="_blank" rel="external">Grunt</a>，以及最近流行的Broccoli，我相信Gulp会更胜一筹（请看后面的”Why Gulp?”部分），同时我汇总了一个使用Javascript编写的构建工具清单，可供大家参考。</p>
+<p>Gulp是一个可以<a href="https://github.com/gulpjs/gulp/" target="_blank" rel="external">在GitHub上</a>找到的开源项目。</p>
 <h2 id="安装">安装</h2>
 <p>Gulp需要全局安装，然后再在项目的开发目录中安装为本地模块。先进入项目目录，运行下面的命令。</p>
+<a id="more"></a>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">npm install -g gulp</div><div class="line"></div><div class="line">npm install --save-dev gulp</div></pre></td></tr></table></figure>
 
-<a id="more"></a>
 <h2 id="gulpfile-js">gulpfile.js</h2>
 <p>项目根目录中的gulpfile.js，是Gulp的配置文件。它大概是下面的样子。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> gulp = <span class="built_in">require</span>(<span class="string">'gulp'</span>);</div><div class="line"></div><div class="line">gulp.task(<span class="string">'default'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{</div><div class="line">});</div></pre></td></tr></table></figure>
@@ -112,8 +121,7 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">npm install --save-dev gulp-uglify</div></pre></td></tr></table></figure>
 
 <p>gulpfile.js加载gulp和gulp-uglify模块之后，使用gulp模块的task方法指定任务。task方法有两个参数，第一个是任务名，第二个是任务函数。在任务函数中，使用gulp模块的src方法，指定所要处理的文件，然后使用pipe方法，将上一步的输出转为当前的输入，进行链式处理。</p>
-<p>在上面代码中，使用两次pipe方法，也就是说做了两种处理。第一种处理是使用gulp-uglify模块，压缩源码；第二种处理是使用gulp模块的dest方法，将上一步的输出写入本地文件，这里是build.js（代码中省略了后缀名js）。</p>
-<p>从上面的例子中可以看到，gulp充分使用了“管道”思想，就是一个数据流（stream）：src方法读入文件产生数据流，dest方法将数据流写入文件，中间是一些中间步骤，每一步都对数据流进行一些处理。</p>
+<p>在上面代码中，使用两次pipe方法，也就是说做了两种处理。第一种处理是使用gulp-uglify模块，压缩源码；第二种处理是使用gulp模块的dest方法，将上一步的输出写入本地文件，这里是build.js（代码中省略了后缀名js）。<br><img src="http://p1.qhimg.com/t01759cebd478ca1a35.png" alt="img"><br>从上面的例子中可以看到，gulp充分使用了“管道”思想，就是一个数据流（stream）：src方法读入文件产生数据流，dest方法将数据流写入文件，中间是一些中间步骤，每一步都对数据流进行一些处理。</p>
 <p>下面是另一个数据流的例子。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">gulp.task(<span class="string">'js'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{</div><div class="line">   <span class="keyword">return</span> gulp.src(<span class="string">'js/*.js'</span>)</div><div class="line">      .pipe(jshint())</div><div class="line">      .pipe(uglify())</div><div class="line">      .pipe(concat(<span class="string">'app.js'</span>))</div><div class="line">      .pipe(gulp.dest(<span class="string">'build'</span>));</div><div class="line">});</div></pre></td></tr></table></figure>
 
@@ -244,7 +252,7 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulpfile-js"><span class="toc-number">2.</span> <span class="toc-text">gulpfile.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-src()"><span class="toc-number">3.</span> <span class="toc-text">gulp.src()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-task()"><span class="toc-number">4.</span> <span class="toc-text">gulp.task()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-watch()"><span class="toc-number">5.</span> <span class="toc-text">gulp.watch()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-load-plugins模块"><span class="toc-number">6.</span> <span class="toc-text">gulp-load-plugins模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-livereload模块"><span class="toc-number">7.</span> <span class="toc-text">gulp-livereload模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">8.</span> <span class="toc-text">参考链接</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp介绍"><span class="toc-number">1.</span> <span class="toc-text">gulp介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulpfile-js"><span class="toc-number">3.</span> <span class="toc-text">gulpfile.js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-src()"><span class="toc-number">4.</span> <span class="toc-text">gulp.src()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-task()"><span class="toc-number">5.</span> <span class="toc-text">gulp.task()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-watch()"><span class="toc-number">6.</span> <span class="toc-text">gulp.watch()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-load-plugins模块"><span class="toc-number">7.</span> <span class="toc-text">gulp-load-plugins模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gulp-livereload模块"><span class="toc-number">8.</span> <span class="toc-text">gulp-livereload模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">9.</span> <span class="toc-text">参考链接</span></a></li></ol>
   </div>
 
 <div id="asidepart">
