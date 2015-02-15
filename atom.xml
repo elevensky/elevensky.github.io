@@ -4,7 +4,7 @@
   <subtitle><![CDATA[hello world, hello 多肉]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://elevensky.github.io/"/>
-  <updated>2015-02-15T03:50:29.448Z</updated>
+  <updated>2015-02-15T10:43:56.728Z</updated>
   <id>http://elevensky.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://elevensky.github.io/2015/02/14/Gulp-%E4%BB%BB%E5%8A%A1%E8%87%AA%E5%8A%A8%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/"/>
     <id>http://elevensky.github.io/2015/02/14/Gulp-任务自动管理工具/</id>
     <published>2015-02-14T14:22:19.000Z</published>
-    <updated>2015-02-15T03:07:34.000Z</updated>
+    <updated>2015-02-15T09:57:38.000Z</updated>
     <content type="html"><![CDATA[<h2 id="gulp介绍">gulp介绍</h2>
 <p>Gulp与Grunt一样，也是一个自动任务运行器。它充分借鉴了Unix操作系统的管道（pipe）思想，很多人认为，在操作上，它要比Grunt简单。</p>
 <p>Gulp是基于Node.js构建的，因此Gulp源文件和你用来定义任务的Gulp文件都被写进了JavaScript（或者CoffeeScript）里。前端开发工程师还可以用自己熟悉的语言来编写任务去lint JavaScript和CSS、解析模板以及在文件变动时编译LESS文件（当然这些只是一小部分例子）。</p>
@@ -42,7 +42,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">npm install --save-dev gulp-uglify</div></pre></td></tr></table></figure>
 
 <p>gulpfile.js加载gulp和gulp-uglify模块之后，使用gulp模块的task方法指定任务。task方法有两个参数，第一个是任务名，第二个是任务函数。在任务函数中，使用gulp模块的src方法，指定所要处理的文件，然后使用pipe方法，将上一步的输出转为当前的输入，进行链式处理。</p>
-<p>在上面代码中，使用两次pipe方法，也就是说做了两种处理。第一种处理是使用gulp-uglify模块，压缩源码；第二种处理是使用gulp模块的dest方法，将上一步的输出写入本地文件，这里是build.js（代码中省略了后缀名js）。<br><img src="http://p1.qhimg.com/t01759cebd478ca1a35.png" alt="img"><br>从上面的例子中可以看到，gulp充分使用了“管道”思想，就是一个数据流（stream）：src方法读入文件产生数据流，dest方法将数据流写入文件，中间是一些中间步骤，每一步都对数据流进行一些处理。</p>
+<p>在上面代码中，使用两次pipe方法，也就是说做了两种处理。第一种处理是使用gulp-uglify模块，压缩源码；第二种处理是使用gulp模块的dest方法，将上一步的输出写入本地文件，这里是build.js（代码中省略了后缀名js）。<br><img src="http://p1.qhimg.com/t01759cebd478ca1a35.png" width="400px;"><br>从上面的例子中可以看到，gulp充分使用了“管道”思想，就是一个数据流（stream）：src方法读入文件产生数据流，dest方法将数据流写入文件，中间是一些中间步骤，每一步都对数据流进行一些处理。</p>
 <p>下面是另一个数据流的例子。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">gulp.task(<span class="string">'js'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{</div><div class="line">   <span class="keyword">return</span> gulp.src(<span class="string">'js/*.js'</span>)</div><div class="line">      .pipe(jshint())</div><div class="line">      .pipe(uglify())</div><div class="line">      .pipe(concat(<span class="string">'app.js'</span>))</div><div class="line">      .pipe(gulp.dest(<span class="string">'build'</span>));</div><div class="line">});</div></pre></td></tr></table></figure>
 
@@ -138,7 +138,7 @@
     
       <category term="gulp" scheme="http://elevensky.github.io/tags/gulp/"/>
     
-      <category term="前端" scheme="http://elevensky.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+      <category term="前端" scheme="http://elevensky.github.io/categories/-categories-frontend/"/>
     
   </entry>
   
@@ -147,14 +147,14 @@
     <link href="http://elevensky.github.io/2015/02/13/%E4%B8%B4%E6%B2%82%E8%8B%8D%E5%B1%B1%E5%A4%9A%E8%82%89%E5%A4%A7%E6%A3%9A%E6%B8%B8/"/>
     <id>http://elevensky.github.io/2015/02/13/临沂苍山多肉大棚游/</id>
     <published>2015-02-13T05:01:16.000Z</published>
-    <updated>2015-02-13T06:02:03.000Z</updated>
+    <updated>2015-02-15T09:57:58.000Z</updated>
     <content type="html"><![CDATA[<p>其实自从见到多肉以后，真的是非常非常喜欢的。<br>作为一个曾经混迹在一线城市的半吊子程序员，工作之外的生活就是程序员之间的搞基，单调乏味的个一逼。<br>作为一个连自己都养不好的人，养狗养猫咱们是一点个闲情雅致也没有。但是养点个植物还是很好的，至少你不用给动物一样天天他妈的伺候。<br>昨天去了我们大美临沂的多肉基地-苍山（兰陵）大柳树多肉大棚。<br>兰陵县月庄大柳树西200米。（大柳树是个标志，路口旁的一刻大柳树）<br>临沂多肉大棚详细路径：走206国道到兰陵汽车站，在汽车站前方第二个红绿灯处右拐，大约五公里，到北城医院就能看见大柳树，从大柳树处左拐进去大约半公里左侧<br>下面上图：</p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p>其实自从见到多肉以后，真的是非常非常喜欢的。<br>作为一个曾经混迹在一线城市的半吊子程序员，工作之外的生活就是程序员之间的搞基，单调乏味的个一逼。<br>作为一个连自己都养不好的人，养狗养猫咱们是一点个闲情雅致也没有。但是养点个植物还是很好的，至少你不用给动物一样天天他妈]]>
     </summary>
     
-      <category term="多肉" scheme="http://elevensky.github.io/categories/%E5%A4%9A%E8%82%89/"/>
+      <category term="多肉" scheme="http://elevensky.github.io/categories/-categories-duorou/"/>
     
   </entry>
   
@@ -163,7 +163,7 @@
     <link href="http://elevensky.github.io/2015/02/11/%E6%88%91%E7%9A%842014/"/>
     <id>http://elevensky.github.io/2015/02/11/我的2014/</id>
     <published>2015-02-11T06:06:35.000Z</published>
-    <updated>2015-02-14T15:26:51.000Z</updated>
+    <updated>2015-02-15T09:57:34.000Z</updated>
     <content type="html"><![CDATA[<p>2014年是很受伤的一年，我就不在这里诉苦了。</p>
 <p>说说今年的一些计划，作为一个前端从业者，越来越感受到技术的紧迫性。<br>随着前端在整个行业领域的日益凸显，这个行业的技术无论从深度，广度上都在日益的重度加重当中。<br>作为在这个领域底层摸爬滚打的人，我深深感觉到自己的不足，甚至一度怀疑自己是否真的擅长做这个。<br>我一直以来都不是一个妄自菲薄和狂妄自大的人。走到今天，我已经深知自己是一个有自知之明的人。<br><a id="more"></a><br>虽然痛苦迷茫失落了2014年，但是毕竟自己一踏入职场便选择的这个行业。</p>
 <p>今年初步需要掌握的一些技术</p>

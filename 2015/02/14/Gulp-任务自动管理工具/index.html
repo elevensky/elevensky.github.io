@@ -19,6 +19,8 @@ Gulp是一个可以在GitHub上找到的开源项目。
 Gulp需要全局安装，然后再在项目的开发目录中安装为本地模块。先进入项目目录，运行下面的命令。">
     
     
+      <meta name="keywords" content="Web,前端,JavaScript,html5,css3">
+    
     
     
     
@@ -53,7 +55,7 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
 					
 						<li><a href="/categories/life/">随感</a></li>
 					
-						<li><a href="/categories/front/">前端</a></li>
+						<li><a href="/categories/frontend/">前端</a></li>
 					
 						<li><a href="/categories/duorou/">多肉</a></li>
 					
@@ -87,7 +89,7 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
     </p>
   <p class="article-time">
     <time datetime="2015-02-14T14:22:19.000Z" itemprop="datePublished">2月 14 2015</time>
-    更新日期:<time datetime="2015-02-15T03:07:34.000Z" itemprop="dateModified">2月 15 2015</time>
+    更新日期:<time datetime="2015-02-15T09:57:38.000Z" itemprop="dateModified">2月 15 2015</time>
     
   </p>
 </header>
@@ -121,7 +123,7 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">npm install --save-dev gulp-uglify</div></pre></td></tr></table></figure>
 
 <p>gulpfile.js加载gulp和gulp-uglify模块之后，使用gulp模块的task方法指定任务。task方法有两个参数，第一个是任务名，第二个是任务函数。在任务函数中，使用gulp模块的src方法，指定所要处理的文件，然后使用pipe方法，将上一步的输出转为当前的输入，进行链式处理。</p>
-<p>在上面代码中，使用两次pipe方法，也就是说做了两种处理。第一种处理是使用gulp-uglify模块，压缩源码；第二种处理是使用gulp模块的dest方法，将上一步的输出写入本地文件，这里是build.js（代码中省略了后缀名js）。<br><img src="http://p1.qhimg.com/t01759cebd478ca1a35.png" alt="img"><br>从上面的例子中可以看到，gulp充分使用了“管道”思想，就是一个数据流（stream）：src方法读入文件产生数据流，dest方法将数据流写入文件，中间是一些中间步骤，每一步都对数据流进行一些处理。</p>
+<p>在上面代码中，使用两次pipe方法，也就是说做了两种处理。第一种处理是使用gulp-uglify模块，压缩源码；第二种处理是使用gulp模块的dest方法，将上一步的输出写入本地文件，这里是build.js（代码中省略了后缀名js）。<br><img src="http://p1.qhimg.com/t01759cebd478ca1a35.png" width="400px;"><br>从上面的例子中可以看到，gulp充分使用了“管道”思想，就是一个数据流（stream）：src方法读入文件产生数据流，dest方法将数据流写入文件，中间是一些中间步骤，每一步都对数据流进行一些处理。</p>
 <p>下面是另一个数据流的例子。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">gulp.task(<span class="string">'js'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{</div><div class="line">   <span class="keyword">return</span> gulp.src(<span class="string">'js/*.js'</span>)</div><div class="line">      .pipe(jshint())</div><div class="line">      .pipe(uglify())</div><div class="line">      .pipe(concat(<span class="string">'app.js'</span>))</div><div class="line">      .pipe(gulp.dest(<span class="string">'build'</span>));</div><div class="line">});</div></pre></td></tr></table></figure>
 
@@ -213,7 +215,7 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/前端/">前端</a>
+  <a class="article-category-link" href="/categories/-categories-frontend/">前端</a>
 </div>
 
 
@@ -272,9 +274,9 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
 	<p class="asidetitle">分类</p>
 		<ul>
 		
-			<li><a href="/categories/前端/" title="前端">前端<sup>1</sup></a></li>
+			<li><a href="/categories/-categories-frontend/" title="前端">前端<sup>1</sup></a></li>
 		
-			<li><a href="/categories/多肉/" title="多肉">多肉<sup>1</sup></a></li>
+			<li><a href="/categories/-categories-duorou/" title="多肉">多肉<sup>1</sup></a></li>
 		
 			<li><a href="/categories/生活/" title="生活">生活<sup>1</sup></a></li>
 		
@@ -296,9 +298,9 @@ Gulp需要全局安装，然后再在项目的开发目录中安装为本地模�
 
 
   
-<div class="widget tag">
-  <h3 class="title">近期文章</h3>
-  <ul class="entry">
+<div class="postslist">
+  <h3 class="asidetitle">近期文章</h3>
+  <ul>
     
       <li>
         <a href="/2015/02/14/Gulp-任务自动管理工具/">Gulp: 任务自动管理工具</a>
