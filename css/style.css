@@ -371,7 +371,6 @@ body >header {
   box-shadow: 2px 4px 5px rgba(3,3,3,0.2);
   background: #1abc9c;
   color: #fff;
-  padding: 1em 0 0.8em;
 }
 body >header >div {
   width: 95%;
@@ -384,9 +383,65 @@ body >header >div {
     width: 93%;
   }
 }
+body >header .line {
+  width: 100%;
+  height: 13em;
+  margin: 0 auto;
+}
+@media only screen and (min-width: 768px) {
+  body >header .line {
+    width: 8em;
+    float: left;
+    position: relative;
+  }
+}
+body >header .line span {
+  display: block;
+  width: 0.5em;
+  height: 4.25em;
+  border-right: 0.125em solid #fff;
+  margin: 0 auto;
+}
+@media only screen and (min-width: 768px) {
+  body >header .line span {
+    position: absolute;
+    left: 3em;
+    margin: 0 0 1.5em;
+  }
+}
 body >header a {
   display: block;
   color: #fff;
+}
+.author {
+  width: 6.875em;
+  height: 6.875em;
+  margin: 0 auto;
+  background: no-repeat url("/img/author.jpg") left top;
+  -webkit-background-size: 6.875em 6.875em;
+  -moz-background-size: 6.875em 6.875em;
+  background-size: 6.875em 6.875em;
+  -webkit-border-radius: 3.4375em;
+  border-radius: 3.4375em;
+  -webkit-transition: -webkit-transform 2s ease-out;
+  -moz-transition: -moz-transform 2s ease-out;
+  -o-transition: -o-transform 2s ease-out;
+  -ms-transition: -ms-transform 2s ease-out;
+  transition: transform 2s ease-out;
+}
+.author:hover {
+  -webkit-transform: rotateZ(360deg);
+  -moz-transform: rotateZ(360deg);
+  -o-transform: rotateZ(360deg);
+  -ms-transform: rotateZ(360deg);
+  transform: rotateZ(360deg);
+}
+@media only screen and (min-width: 768px) {
+  .author {
+    position: absolute;
+    top: 4em;
+    margin: 0 0 1.5em;
+  }
 }
 #imglogo {
   float: left;
@@ -418,8 +473,9 @@ body >header a {
 }
 #textlogo {
   float: left;
-  width: 75%;
+  width: 55%;
   margin-left: 0.5em;
+  margin-top: 4.3em;
 }
 #textlogo h1.site-name {
   width: 86%;
@@ -495,7 +551,7 @@ header nav {
   header nav {
     float: right;
     width: auto;
-    margin-top: 1em;
+    margin-top: 8.3em;
     max-height: none;
   }
 }
@@ -1721,7 +1777,15 @@ section.comment {
 footer {
   margin-top: 1em;
   background: #1f1f1f;
-  padding: 0 2% 0.5em;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "covered_by_your_graceregular";
+}
+footer canvas {
+  width: 100%;
+  height: 10em;
+  background: #1f1f1f;
 }
 #footer {
   width: 95%;
@@ -1755,35 +1819,11 @@ footer {
     margin: 0 0 1.5em;
   }
 }
-.author {
-  width: 6.875em;
-  height: 6.875em;
-  margin: 0 auto;
-  background: no-repeat url("/img/author.jpg") left top;
-  -webkit-background-size: 6.875em 6.875em;
-  -moz-background-size: 6.875em 6.875em;
-  background-size: 6.875em 6.875em;
-  -webkit-border-radius: 3.4375em;
-  border-radius: 3.4375em;
-  -webkit-transition: -webkit-transform 2s ease-out;
-  -moz-transition: -moz-transform 2s ease-out;
-  -o-transition: -o-transform 2s ease-out;
-  -ms-transition: -ms-transform 2s ease-out;
-  transition: transform 2s ease-out;
+#footer .copyright {
+  padding: 0.5em;
 }
-.author:hover {
-  -webkit-transform: rotateZ(360deg);
-  -moz-transform: rotateZ(360deg);
-  -o-transform: rotateZ(360deg);
-  -ms-transform: rotateZ(360deg);
-  transform: rotateZ(360deg);
-}
-@media only screen and (min-width: 768px) {
-  .author {
-    position: absolute;
-    top: 6em;
-    margin: 0 0 1.5em;
-  }
+#footer p {
+  text-align: center;
 }
 .info {
   font-family: "covered_by_your_graceregular";
