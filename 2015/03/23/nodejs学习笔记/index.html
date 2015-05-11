@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>nodejs中exports和module.exports区别 | 程序员的多肉花园</title>
+    <title>nodejs学习笔记 | 程序员的多肉花园</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="elevensky">
     
-    <meta name="description" content="Node.js中exports和module.exports有什么不同？
-你肯定对Node.js模块中用来创建函数的exports对象很熟悉（假设一个名为rocker.js的文件）：
-1234exports.name = function() {    console.log(&#39;My name is Lemmy Kilmister&#39;);};">
+    <meta name="description" content="别被Express的API搞晕了
+先来一段最简单的node版hello world
+123456var http = require(&#39;http&#39;);http.createServer(function (req, res) {    res.writeHead(200, {&#39;Content-Typ">
     
     
-      <meta name="keywords" content="exports,module.exports,Web,前端,JavaScript,html5,css3">
+      <meta name="keywords" content="express,Web,前端,JavaScript,html5,css3">
     
     
     
@@ -71,15 +71,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/02/25/nodejs中exports和module-exports区别/" title="nodejs中exports和module.exports区别" itemprop="url">nodejs中exports和module.exports区别</a>
+      <a href="/2015/03/23/nodejs学习笔记/" title="nodejs学习笔记" itemprop="url">nodejs学习笔记</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://elevensky.github.io" title="elevensky">elevensky</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-02-25T06:36:22.000Z" itemprop="datePublished">2月 25 2015</time>
-    更新日期:<time datetime="2015-02-25T07:01:36.000Z" itemprop="dateModified">2月 25 2015</time>
+    <time datetime="2015-03-23T14:40:04.000Z" itemprop="datePublished">3月 23 2015</time>
+    更新日期:<time datetime="2015-03-24T02:29:49.000Z" itemprop="dateModified">3月 24 2015</time>
     
   </p>
 </header>
@@ -88,47 +88,35 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js中exports和module-exports有什么不同？"><span class="toc-number">1.</span> <span class="toc-text">Node.js中exports和module.exports有什么不同？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转载"><span class="toc-number">2.</span> <span class="toc-text">转载</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#别被Express的API搞晕了"><span class="toc-number">1.</span> <span class="toc-text">别被Express的API搞晕了</span></a></li></ol>
 		</div>
 		
-		<h2 id="Node-js中exports和module-exports有什么不同？">Node.js中exports和module.exports有什么不同？</h2>
-<p>你肯定对Node.js模块中用来创建函数的exports对象很熟悉（假设一个名为rocker.js的文件）：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
+		<h2 id="别被Express的API搞晕了">别被Express的API搞晕了</h2>
+<p>先来一段最简单的node版hello world</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> <span class="params">(req, res)</span> </span>{</div><div class="line">    res.writeHead(<span class="number">200</span>, {<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span>});</div><div class="line">    res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">}).listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</div></pre></td></tr></table></figure>
 
-<a id="more"></a>
-<p>然后你在另一个文件中调用：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line">rocker.name(); <span class="comment">// 'My name is Lemmy Kilmister'</span></div></pre></td></tr></table></figure>
+<p>上面这段代码来自nodejs的官网，非常简单，就是来一个请求，就用传给createServer的匿名函数来处理请求。</p>
+<p>下面来看看使用Express的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> app = express();</div><div class="line"><span class="comment">//...中间忽略</span></div><div class="line">http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Express server listening on port '</span> + app.get(<span class="string">'port'</span>));</div><div class="line">});</div></pre></td></tr></table></figure>
 
-<p>但是module.exports到底是个什么玩意儿? 它合法吗？</p>
-<p>令人吃惊的是- <em>module.exports</em> 是真实存在的东西。exports只是module.exports的辅助方法。你的模块最终返回module.exports给调用者，而不是exports。exports所做的事情是收集属性，如果module.exports当前没有任何属性的话，exports会把这些属性赋予module.exports。如果module.exports已经存在一些属性的话，那么exports中所用的东西都会被忽略。</p>
-<p>把下面的内容放到rocker.js:</p>
-<p>module.exports = ‘ROCK IT!’;<br>exports.name = function() {<br>    console.log(‘My name is Lemmy Kilmister’);<br>};<br>然后把下面的内容放到另一个文件中，执行它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line">rocker.name(); <span class="comment">// TypeError: Object ROCK IT! has no method 'name'</span></div></pre></td></tr></table></figure>
+<p>对比可以看出，执行express()后，会返回一个函数，赋值给app，app的签名应该为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req,res)</span></span>{<span class="comment">//...}</span></div></pre></td></tr></table></figure>
 
-<p>rocker模块完全忽略了exports.name，然后返回了一个字符串’ROCK IT!’。通过上面的例子，你可能认识到你的模块不一定非得是模块实例（module instances）。你的模块可以是任何合法的JavaScript对象 - boolean，number，date，JSON， string，function，array和其他。你的模块可以是任何你赋予module.exports的值。如果你没有明确的给module.exports设置任何值，那么exports中的属性会被赋给module.exports中，然后并返回它。</p>
-<p>在下面的情况下，你的模块是一个类：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span><span class="params">(name, age)</span> </span>{</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">    <span class="keyword">this</span>.age = age;</div><div class="line">    <span class="keyword">this</span>.about = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name +<span class="string">' is '</span>+ <span class="keyword">this</span>.age +<span class="string">' years old'</span>);</div><div class="line">    };</div><div class="line">};</div></pre></td></tr></table></figure>
+<p>然后请求都会被app这个函数处理（因为这个app是执行express后的结果，下面将不加区分的使用app和express两个词）。<br>另外一点最新的express中创建http服务器的过程已经封装到了如下代码中：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app.listen = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  <span class="keyword">var</span> server = http.createServer(<span class="keyword">this</span>);</div><div class="line">  <span class="keyword">return</span> server.listen.apply(server, <span class="built_in">arguments</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
 
-<p>然后你应该这样使用它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> Rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line"><span class="keyword">var</span> r = <span class="keyword">new</span> Rocker(<span class="string">'Ozzy'</span>, <span class="number">62</span>);</div><div class="line">r.about(); <span class="comment">// Ozzy is 62 years old</span></div></pre></td></tr></table></figure>
+<p>可以认为，在express内部，有一个函数的数组，暂时叫这个数组tasks，每来一个请求express内部会依次执行这个数组中的函数（这里说依次并不严谨，每个函数必须满足一定条件才行，这个后面说），应该可以想到，在这个函数数组里，每个函数的签名应该像下面那样</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req,res)</span></span>{<span class="comment">//...}</span></div></pre></td></tr></table></figure>
 
-<p>在下面的情况下，你的模块是一个数组：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = [<span class="string">'Lemmy Kilmister'</span>, <span class="string">'Ozzy Osbourne'</span>, <span class="string">'Ronnie James Dio'</span>, <span class="string">'Steven Tyler'</span>, <span class="string">'Mick Jagger'</span>];</div></pre></td></tr></table></figure>
+<p>但是，实际上是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req,res，next)</span></span>{<span class="comment">//...}</span></div></pre></td></tr></table></figure>
 
-<p>然后你应该这样使用它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Rockin in heaven: '</span> + rocker[<span class="number">2</span>]); <span class="comment">//Rockin in heaven: Ronnie James Dio</span></div></pre></td></tr></table></figure>
-
-<p>现在你应该找到要点了 - 如果你想要你的模块成为一个特别的对象类型，那么使用module.exports；如果你希望你的模块成为一个传统的模块实例（module instance），使用exports。</p>
-<p>把属性赋予module.exports的结果与把属性赋予给exports是一样的。看下面这个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
-
-<p>下面这个做的是一样的事情：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
-
-<p>但是请注意，它们并不是一样的东西。就像我之前说的module.exports是真实存在的东西，exports只是它的辅助方法。话虽如此，exports还是推荐的对象，除非你想把你模块 的对象类型从传统的模块实例（module instance）修改为其他的。</p>
-<p>希望这篇文章能帮助你理解exports和module.exports之间的不同，并且能进一步的理解模块在Node.js中是怎么工作的。</p>
-<h2 id="转载">转载</h2>
-<p><em>转载地址</em> ：<a href="http://weizhifeng.net/node-js-exports-vs-module-exports.html" target="_blank" rel="external">http://weizhifeng.net/node-js-exports-vs-module-exports.html</a><br><em>英文原址</em> ：<a href="http://www.hacksparrow.com/node-js-exports-vs-module-exports.html" target="_blank" rel="external">http://www.hacksparrow.com/node-js-exports-vs-module-exports.html</a></p>
+<p>这个next，是指下一个函数。后面我们会写一些试验来体验一下这个next，先总结一下：<br>对于一个典型的使用express的app.js（这个满大街都是代码，就不贴了），做了以下几件事</p>
+<ol>
+<li>导入相关模块</li>
+<li>执行过 var app = express() 后，使用app.set 设置express内部的一些参数（options）使用app.use 来注册函数，可以简单的认为是向那个（被我叫做）tasks的数组进行push操作</li>
+<li>通过http.createServer 用app来处理请求</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -148,7 +136,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://elevensky.github.io/2015/02/25/nodejs中exports和module-exports区别/" data-title="nodejs中exports和module.exports区别 | 程序员的多肉花园" data-tsina="null" class="share clearfix">
+  <div data-url="http://elevensky.github.io/2015/03/23/nodejs学习笔记/" data-title="nodejs学习笔记 | 程序员的多肉花园" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -158,18 +146,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/02/25/你是否强大到不需要信仰/" title="你是否强大到不需要信仰">
+ <a href="/2015/03/24/简析Javascript的prototype和__proto__/" title="简析Javascript的prototype和__proto__">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  你是否强大到不需要信仰</span>
+  简析Javascript的prototype和__proto__</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/02/25/nodejs基础教程/"  title="Node.js 概述">
+<a href="/2015/03/12/nodejs模块机制/"  title="">
  <strong>NEXT:</strong><br/> 
- <span>Node.js 概述
+ <span>(no title)
 </span>
 </a>
 </div>
@@ -179,7 +167,7 @@
 	
 <section id="comment">
   <h1 class="title">文章评论</h1>
-  <div class="ds-thread" data-thread-key="2015/02/25/nodejs中exports和module-exports区别/" data-title="nodejs中exports和module.exports区别" data-url="http://elevensky.github.io/2015/02/25/nodejs中exports和module-exports区别/"></div>
+  <div class="ds-thread" data-thread-key="2015/03/23/nodejs学习笔记/" data-title="nodejs学习笔记" data-url="http://elevensky.github.io/2015/03/23/nodejs学习笔记/"></div>
 </section>
 
 
@@ -188,7 +176,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js中exports和module-exports有什么不同？"><span class="toc-number">1.</span> <span class="toc-text">Node.js中exports和module.exports有什么不同？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转载"><span class="toc-number">2.</span> <span class="toc-text">转载</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#别被Express的API搞晕了"><span class="toc-number">1.</span> <span class="toc-text">别被Express的API搞晕了</span></a></li></ol>
   </div>
 
 <div id="asidepart">

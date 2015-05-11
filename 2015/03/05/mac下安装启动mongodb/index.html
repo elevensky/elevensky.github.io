@@ -1,0 +1,549 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>mac下安装启动mongodb | 程序员的多肉花园</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="elevensky">
+    
+    <meta name="description" content="Mac OSX 10.9.4下使用Homebrew安装MongoDB
+安装Homebrew
+Homebrew是Mac OSX下一个包依赖管理工具，用它来安装软件非常的方便只需要brew install 软件名这一条命令就可以将你所需要的软件安装好，不用再操心安装过程中软件的依赖问题，这些问题Home">
+    
+    
+      <meta name="keywords" content="Web,前端,JavaScript,html5,css3">
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div style="position:relative;">
+			
+				<div class="line">
+					<span></span>
+					<div class="author"></div>
+				</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="程序员的多肉花园">程序员的多肉花园</a></h1>
+				<h2 class="blog-motto">hello world, hello 多肉</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:elevensky.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/03/05/mac下安装启动mongodb/" title="mac下安装启动mongodb" itemprop="url">mac下安装启动mongodb</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://elevensky.github.io" title="elevensky">elevensky</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-03-04T17:10:48.000Z" itemprop="datePublished">3月 5 2015</time>
+    更新日期:<time datetime="2015-03-04T17:25:03.000Z" itemprop="dateModified">3月 5 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac_OSX_10-9-4下使用Homebrew安装MongoDB"><span class="toc-number">1.</span> <span class="toc-text">Mac OSX 10.9.4下使用Homebrew安装MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Homebrew"><span class="toc-number">1.1.</span> <span class="toc-text">安装Homebrew</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mongodb启动失败"><span class="toc-number">1.2.</span> <span class="toc-text">mongodb启动失败</span></a></li></ol></li></ol>
+		</div>
+		
+		<h2 id="Mac_OSX_10-9-4下使用Homebrew安装MongoDB">Mac OSX 10.9.4下使用Homebrew安装MongoDB</h2>
+<h3 id="安装Homebrew">安装Homebrew</h3>
+<p>Homebrew是Mac OSX下一个包依赖管理工具，用它来安装软件非常的方便只需要brew install 软件名这一条命令就可以将你所需要的软件安装好，不用再操心安装过程中软件的依赖问题，这些问题Homebrew统统帮你搞定，Homebrew的官网：<a href="http://brew.sh/" target="_blank" rel="external">http://brew.sh/</a> 在官网上对Homebrew的安装和用法有详细的描述这里就不多扯了。如果你还没有安装，还等什么赶紧动手安装吧！:]</p>
+<p>Homebrew安装方法也很简单：打开终端，然后输入命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby <span class="operator">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)</span>"</span></div></pre></td></tr></table></figure>
+
+<p>对，就是这么简单一条命令就可以将神器Homebrew安装好.</p>
+<p>安装MongoDB</p>
+<p>MongoDB是一个基于分布式文件存储的数据库。由C++语言编写。旨在为WEB应用提供可扩展的高性能数据存储解决方案。 MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。他支持的数据结构非常松散，是类似json的bson格式，因此可以存储比较复杂的数据类型。Mongo最大的特点是他支持的查询语言非常强大，其语法有点类似于面向对象的查询语言，几乎可以实现类似关系数据库单表查询的绝大部分功能，而且还支持对数据建立索引.</p>
+<p>进入正题开始用Homebrew安装主角MongoDB～～～</p>
+<p>在终端输入如下命令即可安装MongoDB</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew <span class="operator"><span class="keyword">install</span> mongodb</span></div></pre></td></tr></table></figure>
+
+<p>用Homebrew安装软件是不是很爽，耐心等待一会儿MongoDB就会安装好了……</p>
+<p>测试MongoDB是否安装成功</p>
+<p>在终端输入如下命令进行测试:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongod</div></pre></td></tr></table></figure>
+
+<p>mongod命令是用来启动MongoDB的服务的。</p>
+<h3 id="mongodb启动失败">mongodb启动失败</h3>
+<p>执行mongos命令后返回了一堆错误信息，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">mongod --help for help and startup options</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] MongoDB starting : pid=13117 port=27017  dbpath=/data/db 64-bit host=zhcmacbook-pro.local</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] db version v2.6.3</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] git version: nogitversion</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] build info: Darwin minimavericks.local 13.2.0  Darwin Kernel Version 13.2.0: Thu Apr 17 23:03:13 PDT 2014; root:xnu-2422.100.13~1/ RELEASE_X86_64 x86_64 BOOST_LIB_VERSION=1_49</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] allocator: tcmalloc</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] options: {}</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] exception in initAndListen: 10296</div><div class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></div><div class="line">  ERROR: dbpath (/data/db) does not exist.</div><div class="line">  Create this directory or give existing directory in --dbpath.</div><div class="line">  See http://dochub.mongodb.org/core/startingandstoppingmongo</div><div class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></div><div class="line">, terminating</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] dbexit:</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: going to close listening sockets...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: going to flush diaglog...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: going to close sockets...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: waiting for fs preallocator...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: lock for final commit...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: final commit...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: closing all files...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] closeAllFiles() finished</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] dbexit: really exiting now</div></pre></td></tr></table></figure>
+
+<p>这么一堆错误信息，重点是这几句</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ERROR: dbpath (/data/db) does <span class="operator">not</span> exist. Create this <span class="built_in">directory</span> <span class="operator">or</span> give existing <span class="built_in">directory</span> <span class="operator">in</span> –dbpath. See <span class="keyword">http</span>://dochub.mongodb.org/core/startingandstoppingmongo</div></pre></td></tr></table></figure>
+
+<p>错误信息的意思是dbpath (/data/db)不存在，需要创建/data/db这个目录或者使用—dbpath参数项指定一个已经存在的目录。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">dbpath</span> (/<span class="typedef"><span class="keyword">data</span>/db)这个目录是用来存储<span class="type">MongoDB</span>数据文件的地方</span></div></pre></td></tr></table></figure>
+
+<p>既然不存在/data/db那我们就创建这个目录</p>
+<p>首先在终端输入cd /命令返回到磁盘根目录</p>
+<p>然后输入mkdir -p /data/db创建/data/db</p>
+<p>再次输入mongos命令启动MongoDB的服务，服务又退出了返回一堆信息如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mongod <span class="comment">--help for help and startup options</span></div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] MongoDB starting : pid=21182 port=27017  dbpath=/data/db 64-bit host=zhcmacbook-pro.local</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] db version v2.6.3</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] git version: nogitversion</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] build info: Darwin minimavericks.local 13.2.0  Darwin Kernel Version 13.2.0: Thu Apr 17 23:03:13 PDT 2014; root:xnu-2422.100.13~1/ RELEASE_X86_64 x86_64 BOOST_LIB_VERSION=1_49</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] allocator: tcmalloc</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] options: {}</div><div class="line">2014-07-17T23:56:40.287+0800 [initandlisten] exception in initAndListen: 10309 Unable to  <span class="operator"><span class="keyword">create</span>/<span class="keyword">open</span> <span class="keyword">lock</span> file: /<span class="keyword">data</span>/db/mongod.<span class="keyword">lock</span> errno:<span class="number">13</span> Permission denied <span class="keyword">Is</span> a mongod  instance already running?, terminating</span></div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] dbexit:</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: going <span class="keyword">to</span> <span class="keyword">close</span> listening sockets...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: going <span class="keyword">to</span> <span class="keyword">flush</span> diaglog...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: going <span class="keyword">to</span> <span class="keyword">close</span> sockets...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: waiting <span class="keyword">for</span> fs preallocator...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: <span class="keyword">lock</span> <span class="keyword">for</span> final <span class="keyword">commit</span>...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: final <span class="keyword">commit</span>...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: closing <span class="keyword">all</span> files...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.288</span>+<span class="number">0800</span> [initandlisten] closeAllFiles() finished</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.288</span>+<span class="number">0800</span> [initandlisten] shutdown: removing fs <span class="keyword">lock</span>...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.288</span>+<span class="number">0800</span> [initandlisten] couldn<span class="string">'t remove fs lock errno:9 Bad file   descriptor</span></div><div class="line">2014-07-17T23:56:40.288+0800 [initandlisten] dbexit: really exiting now</div></pre></td></tr></table></figure>
+
+<p>出错原因是这几句log</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="operator"><span class="keyword">create</span>/<span class="keyword">open</span> <span class="keyword">lock</span> file: /<span class="keyword">data</span>/db/mongod.<span class="keyword">lock</span> errno:<span class="number">13</span> Permission denied <span class="keyword">Is</span> a mongod  instance already running?, terminating</span></div></pre></td></tr></table></figure>
+
+<p>意思是不创建和打开/data/db/mongod.lock这个文件，原因是Permission denied（权限拒绝），看来是当前用户执行mongod这个命令时，对/data/db这个目录没有操作权限，OK，知道原因就好办了，给/data/db加上权限。</p>
+<p>在终端输入如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">sudo</span> chown -<span class="type">R</span>  当前登录的用户名 /<span class="typedef"><span class="keyword">data</span></span></div></pre></td></tr></table></figure>
+
+<p>再次在终端输入 <strong>mongod</strong> 启动MongoDB的服务，返回如下信息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mongod <span class="comment">--help for help and startup options</span></div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] MongoDB starting : pid=<span class="number">22420</span> port=<span class="number">27017</span>  dbpath=/data/db <span class="number">64</span>-bit host=zhcmacbook-pro.<span class="built_in">local</span></div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] db <span class="built_in">version</span> v2<span class="number">.6</span><span class="number">.3</span></div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] git <span class="built_in">version</span>: nogitversion</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] build info: Darwin minimavericks.<span class="built_in">local</span> <span class="number">13.2</span><span class="number">.0</span>  Darwin Kernel Version <span class="number">13.2</span><span class="number">.0</span>: Thu Apr <span class="number">17</span> <span class="number">23</span>:<span class="number">03</span>:<span class="number">13</span> PDT <span class="number">2014</span>; root:xnu-<span class="number">2422.100</span><span class="number">.13</span>~<span class="number">1</span>/ RELEASE_X86_64 x86_64 BOOST_LIB_VERSION=<span class="number">1</span>_49</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] allocator: tcmalloc</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.287</span>+<span class="number">0800</span> [initandlisten] options: {}</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.288</span>+<span class="number">0800</span> [initandlisten] journal dir=/data/db/journal</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.288</span>+<span class="number">0800</span> [initandlisten] recover : no journal <span class="built_in">files</span> present, no   recovery needed</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.437</span>+<span class="number">0800</span> [initandlisten] waiting <span class="keyword">for</span> connections <span class="command"><span class="keyword">on</span> <span class="title">port</span> <span class="title">27017</span></span></div></pre></td></tr></table></figure>
+
+<p>终于启动成功了，然后再打开一个新的终端窗口输入 <strong>mongo</strong> 命令，返回如下信息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">~ $ mongo</div><div class="line">MongoDB <span class="built_in">shell</span> <span class="built_in">version</span>: <span class="number">2.6</span><span class="number">.3</span></div><div class="line">connecting <span class="built_in">to</span>: test</div><div class="line">Welcome <span class="built_in">to</span> <span class="operator">the</span> MongoDB <span class="built_in">shell</span>.</div><div class="line">For interactive help, type <span class="string">"help"</span>.</div><div class="line">For more comprehensive documentation, see</div><div class="line"><span class="keyword">http</span>://docs.mongodb.org/</div><div class="line">Questions? Try <span class="operator">the</span> support group</div><div class="line"><span class="keyword">http</span>://groups.google.com/group/mongodb-user</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+
+<p>哦耶！，成功进入MongoDB的命令行模式，到这里MongoDB就安装好了！:] :] :]……</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://elevensky.github.io/2015/03/05/mac下安装启动mongodb/" data-title="mac下安装启动mongodb | 程序员的多肉花园" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/03/12/nodejs模块机制/" title="">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  (no title)</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2015/02/27/js继承机制/"  title="js继承机制">
+ <strong>NEXT:</strong><br/> 
+ <span>js继承机制
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comment">
+  <h1 class="title">文章评论</h1>
+  <div class="ds-thread" data-thread-key="2015/03/05/mac下安装启动mongodb/" data-title="mac下安装启动mongodb" data-url="http://elevensky.github.io/2015/03/05/mac下安装启动mongodb/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mac_OSX_10-9-4下使用Homebrew安装MongoDB"><span class="toc-number">1.</span> <span class="toc-text">Mac OSX 10.9.4下使用Homebrew安装MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Homebrew"><span class="toc-number">1.1.</span> <span class="toc-text">安装Homebrew</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mongodb启动失败"><span class="toc-number">1.2.</span> <span class="toc-text">mongodb启动失败</span></a></li></ol></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/frontend/" title="frontend">frontend<sup>1</sup></a></li>
+		
+			<li><a href="/categories/life/" title="life">life<sup>1</sup></a></li>
+		
+			<li><a href="/categories/-categories-frontend/" title="前端">前端<sup>7</sup></a></li>
+		
+			<li><a href="/categories/-categories-duorou/" title="多肉">多肉<sup>1</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/gulp/" title="gulp">gulp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/js/" title="js">js<sup>3</sup></a></li>
+		
+			<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
+		
+			<li><a href="/tags/nodejs/" title="nodejs">nodejs<sup>3</sup></a></li>
+		
+			<li><a href="/tags/语法/" title="语法">语法<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="categorieslist">
+  <h3 class="asidetitle">近期文章</h3>
+  <ul>
+    
+      <li>
+        <a href="/2015/04/05/js中的变量以及如何定义静态变量/">js中的变量以及如何定义静态变量</a>
+      </li>
+    
+      <li>
+        <a href="/2015/04/01/Array-prototype-slice-call-arguments/">Array.prototype.slice.call(arguments)</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/31/what-is-this/">what is &#39;this&#39;?</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/24/简析Javascript的prototype和__proto__/">简析Javascript的prototype和__proto__</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/23/nodejs学习笔记/">nodejs学习笔记</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/12/nodejs模块机制/"></a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/05/mac下安装启动mongodb/">mac下安装启动mongodb</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/27/js继承机制/">js继承机制</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/25/你是否强大到不需要信仰/">你是否强大到不需要信仰</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/25/nodejs中exports和module-exports区别/">nodejs中exports和module.exports区别</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/25/nodejs基础教程/">Node.js 概述</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/22/你是船长/">你是船长，你必须在黑暗中发出微光！</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=0&uid=1722627987&verifier=85fa2548&dpc=1"></iframe>
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><canvas id="canvas"></canvas>
+<div id="footer">
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015
+		
+		<a href="http://elevensky.github.io" target="_blank" title="elevensky">elevensky</a>
+		
+		<br />
+		<span style="color:#817c7c">My heart is beating just for you</span>
+		</p>
+</div>
+<script>
+	window.requestAnimFrame = (function(){
+	  return  window.requestAnimationFrame       ||
+	          window.webkitRequestAnimationFrame ||
+	          window.mozRequestAnimationFrame    ||
+	          function( callback ){
+	            window.setTimeout(callback, 1000 / 60);
+	          };
+	})();
+
+	var canvas = document.getElementById('canvas'),
+		context = canvas.getContext('2d'),
+		width = canvas.width = document.body.offsetWidth,
+		height = canvas.height,
+		ball = {
+			x: 0,
+			y: height / 2,
+		},
+		point = {
+			x: 0,
+			y: ball.y
+		},
+		current_point = 0;
+
+	var points = [
+			{y:0,x:20},
+			{y:0,x:1},
+	        {y:3,x:1},
+		    {y:-10,x:2},
+			{y:10,x:2},
+		    {y:-12,x:3},
+		    {y:35,x:5},
+		    {y:-25,x:4},
+		    {y:14,x:3},
+		    {y:5,x:2},
+			{y:0,x:1},
+			{y:0,x:20}
+		];
+	context.fillStyle = "rgb(31, 31, 31)";
+	render();
+	function animateTo() {
+		function dist(x1,x2,y1,y2) {
+			var dx = x1 - x2,
+				dy = y1 - y2;
+			return {
+				d: Math.sqrt(dx*dx + dy*dy),
+				dx: dx,
+				dy: dy
+			};
+		}
+		var dis = dist(ball.x, point.x+points[current_point].x,ball.y, point.y+points[current_point].y);
+		if( dis.d > 1 ) {
+			var s = Math.abs(dis.dy) > 13 ? 2 : 1;
+			ball.x += -( dis.dx / dis.d )*s;
+			ball.y += -( dis.dy / dis.d )*s;
+		} else {
+			ball.x = point.x+points[current_point].x;
+			ball.y = point.y+points[current_point].y;
+			point.x += points[current_point].x;
+			current_point++;
+			if( current_point >= points.length || ball.x > width ) {
+				current_point = 0;
+				if( ball.x > width ) {
+					point.x = ball.x = 0;
+				}
+			}
+		}
+	}
+	function render() {
+		requestAnimFrame(render);
+		animateTo();
+		context.fillStyle = "rgba(0, 0, 0, .01)";
+		context.fillRect(0,0,width,height);
+		context.fillStyle = "rgba(255, 0, 0, 1)";
+		context.beginPath();
+		context.arc(ball.x, ball.y, 1, 0, 2*Math.PI, true);
+		context.closePath();
+		context.fill();
+	}
+</script></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"elevensky"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
+
+
+
+  </body>
+</html>

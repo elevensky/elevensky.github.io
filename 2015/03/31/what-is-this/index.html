@@ -4,17 +4,17 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>nodejs中exports和module.exports区别 | 程序员的多肉花园</title>
+    <title>what is &#39;this&#39;? | 程序员的多肉花园</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="elevensky">
     
-    <meta name="description" content="Node.js中exports和module.exports有什么不同？
-你肯定对Node.js模块中用来创建函数的exports对象很熟悉（假设一个名为rocker.js的文件）：
-1234exports.name = function() {    console.log(&#39;My name is Lemmy Kilmister&#39;);};">
+    <meta name="description" content="呃，这次的标题有些「装逼」，首先我们从道题目开始。
+这是道有趣的题目：考虑下面的代码，考虑 console.log 输出的值：
+123456789101112131415var x = 10;var foo = {    x: 20,    bar: function () {        var">
     
     
-      <meta name="keywords" content="exports,module.exports,Web,前端,JavaScript,html5,css3">
+      <meta name="keywords" content="this,Web,前端,JavaScript,html5,css3">
     
     
     
@@ -71,15 +71,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/02/25/nodejs中exports和module-exports区别/" title="nodejs中exports和module.exports区别" itemprop="url">nodejs中exports和module.exports区别</a>
+      <a href="/2015/03/31/what-is-this/" title="what is &#39;this&#39;?" itemprop="url">what is &#39;this&#39;?</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://elevensky.github.io" title="elevensky">elevensky</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-02-25T06:36:22.000Z" itemprop="datePublished">2月 25 2015</time>
-    更新日期:<time datetime="2015-02-25T07:01:36.000Z" itemprop="dateModified">2月 25 2015</time>
+    <time datetime="2015-03-31T03:51:39.000Z" itemprop="datePublished">3月 31 2015</time>
+    更新日期:<time datetime="2015-03-31T06:11:53.000Z" itemprop="dateModified">3月 31 2015</time>
     
   </p>
 </header>
@@ -88,54 +88,102 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js中exports和module-exports有什么不同？"><span class="toc-number">1.</span> <span class="toc-text">Node.js中exports和module.exports有什么不同？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转载"><span class="toc-number">2.</span> <span class="toc-text">转载</span></a></li></ol>
+		
 		</div>
 		
-		<h2 id="Node-js中exports和module-exports有什么不同？">Node.js中exports和module.exports有什么不同？</h2>
-<p>你肯定对Node.js模块中用来创建函数的exports对象很熟悉（假设一个名为rocker.js的文件）：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
+		<p>呃，这次的标题有些「装逼」，首先我们从道题目开始。</p>
+<p>这是道有趣的题目：考虑下面的代码，考虑 console.log 输出的值：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</div><div class="line"><span class="keyword">var</span> foo = {</div><div class="line">    x: <span class="number">20</span>,</div><div class="line">    bar: <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{</div><div class="line">        <span class="keyword">var</span> x = <span class="number">30</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.x;</div><div class="line">    }</div><div class="line">};</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(</div><div class="line">    foo.bar(),             <span class="comment">// 1.</span></div><div class="line">    (foo.bar)(),           <span class="comment">// 2.</span></div><div class="line">    (foo.bar = foo.bar)(), <span class="comment">// 3.</span></div><div class="line">    (foo.bar, foo.bar)()   <span class="comment">// 4.</span></div><div class="line">);</div></pre></td></tr></table></figure>
 
-<a id="more"></a>
-<p>然后你在另一个文件中调用：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line">rocker.name(); <span class="comment">// 'My name is Lemmy Kilmister'</span></div></pre></td></tr></table></figure>
+<p>实际上，题目真正意思求 console.log 中依次四条语句的值。为了方便讲述，上面的语句分别标注为 1-4。</p>
+<p>首先，是「1.」这条语句相对来说比较明朗（其实我们也经常这样写）。调用 foo 的 bar 方法，因此 bar 的 this 指向（作用域）为 foo，因此就等于是取 foo 上面的 x 属性（也就是 foo.x）的值，那么语句返回的值就是 20 。</p>
+<p>然后是「2.」这条语句。我们可能对 Grouping Operator （也就是「()」）犹豫不决，那 么我们找找 ECMA 中相关定义 ：</p>
+<blockquote>
+<p>11.1.6 The Grouping Operator</p>
+<p>The production PrimaryExpression : ( Expression ) is evaluated as follows:</p>
+<blockquote>
+<ol>
+<li>Evaluate Expression. This may be of type Reference.</li>
+<li>Return Result(1).</li>
+</ol>
+</blockquote>
+<p>NOTE</p>
+<p>This algorithm does not apply GetValue to Result(1). The principal<br>motivation for this is so that operators such as delete and typeof<br>may be applied to parenthesised expressions.</p>
+</blockquote>
+<p>因此，由于 foo.bar 是个引用「Reference」，所以使用组操作符 (foo.bar) 返回 的引用是和 foo.bar 是一样的。</p>
+<p>如果还不理解，那么考虑下面的表达式：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(foo.bar === (foo.bar))</div></pre></td></tr></table></figure>
 
-<p>但是module.exports到底是个什么玩意儿? 它合法吗？</p>
-<p>令人吃惊的是- <em>module.exports</em> 是真实存在的东西。exports只是module.exports的辅助方法。你的模块最终返回module.exports给调用者，而不是exports。exports所做的事情是收集属性，如果module.exports当前没有任何属性的话，exports会把这些属性赋予module.exports。如果module.exports已经存在一些属性的话，那么exports中所用的东西都会被忽略。</p>
-<p>把下面的内容放到rocker.js:</p>
-<p>module.exports = ‘ROCK IT!’;<br>exports.name = function() {<br>    console.log(‘My name is Lemmy Kilmister’);<br>};<br>然后把下面的内容放到另一个文件中，执行它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line">rocker.name(); <span class="comment">// TypeError: Object ROCK IT! has no method 'name'</span></div></pre></td></tr></table></figure>
+<p>因此，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(foo.bar)();</div></pre></td></tr></table></figure>
 
-<p>rocker模块完全忽略了exports.name，然后返回了一个字符串’ROCK IT!’。通过上面的例子，你可能认识到你的模块不一定非得是模块实例（module instances）。你的模块可以是任何合法的JavaScript对象 - boolean，number，date，JSON， string，function，array和其他。你的模块可以是任何你赋予module.exports的值。如果你没有明确的给module.exports设置任何值，那么exports中的属性会被赋给module.exports中，然后并返回它。</p>
-<p>在下面的情况下，你的模块是一个类：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span><span class="params">(name, age)</span> </span>{</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">    <span class="keyword">this</span>.age = age;</div><div class="line">    <span class="keyword">this</span>.about = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name +<span class="string">' is '</span>+ <span class="keyword">this</span>.age +<span class="string">' years old'</span>);</div><div class="line">    };</div><div class="line">};</div></pre></td></tr></table></figure>
+<p>返回的也是 foo.x 的值，也就是 20 。</p>
+<p>我们考虑语句 3. 和上面的两个语句有什么不同</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(foo.bar = foo.bar)(), <span class="comment">// 3.</span></div></pre></td></tr></table></figure>
 
-<p>然后你应该这样使用它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> Rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line"><span class="keyword">var</span> r = <span class="keyword">new</span> Rocker(<span class="string">'Ozzy'</span>, <span class="number">62</span>);</div><div class="line">r.about(); <span class="comment">// Ozzy is 62 years old</span></div></pre></td></tr></table></figure>
+<p>相比语句 2.，语句 3. 中的 Grouping Operator 中有赋值（「=」）语句。那么，我们首先得明白赋值语句干了啥，继续 参考对应的 ECMA 文档</p>
+<blockquote>
+<p>11.13.1 Simple Assignment (= )</p>
+<p>The production</p>
+<blockquote>
+<p>   AssignmentExpression : LeftHandSideExpression = AssignmentExpression</p>
+</blockquote>
+<p>is evaluated as follows:</p>
+<blockquote>
+<ol>
+<li>Evaluate LeftHandSideExpression.</li>
+<li>Evaluate AssignmentExpression.<br>3.Call GetValue(Result(2)).<br>4.Call PutValue(Result(1), Result(3)).<br>5.Return Result(3).</li>
+</ol>
+</blockquote>
+</blockquote>
+<p>其中，最重要的步骤就是 PutValue，我们 继续刨根问底</p>
+<blockquote>
+<p>8.7.2 PutValue(V, W)</p>
+<blockquote>
+<ol>
+<li>If Type(V) is not Reference, throw a<br>ReferenceError exception.</li>
+<li>Call GetBase(V).</li>
+<li>If Result(2) is null, go to step 6.</li>
+<li>Call the [[Put]] method of Result(2), passing GetPropertyName(V)<br>for the property name and W for the value.</li>
+<li>Return.</li>
+<li>Call the [[Put]] method for the global object, passing<br>GetPropertyName(V) for the property name and W for the value.</li>
+<li>Return.<br>所以，我们根据上面的定义可以得知，语句返回的是 foo.bar 的函数值。因此，赋值操作符返回的是「值（Value）」而不是「引用（Reference）」。</li>
+</ol>
+</blockquote>
+</blockquote>
+<p>因为函数体需要 this 值获取 x 属性的值，那么接下来我们考虑改函数时调用时的上下文作用域以及背后的具体流程。 尤其注意第七条规则</p>
+<blockquote>
+<ol>
+<li>If Type(Result(1)) is Reference, Result(6) is GetBase( Result(1)).<br> Otherwise, Result(6) is null.</li>
+<li>If Result(6) is an activation object, Result(7) is null. Otherwise,<br> Result(7) is the same as Result(6).</li>
+<li>Call the [[Call]] method on Result(3), providing Result(7) as<br> the this value and providing the list Result(2) as the<br> argument values.</li>
+</ol>
+</blockquote>
+<p>那么在这种情况下，GetBase 操作实际上返回的是 null，因此此条语句函数执行的作用域为 global ，在浏览器中也就是 window 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(foo.bar = foo.bar)()</div></pre></td></tr></table></figure>
 
-<p>在下面的情况下，你的模块是一个数组：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = [<span class="string">'Lemmy Kilmister'</span>, <span class="string">'Ozzy Osbourne'</span>, <span class="string">'Ronnie James Dio'</span>, <span class="string">'Steven Tyler'</span>, <span class="string">'Mick Jagger'</span>];</div></pre></td></tr></table></figure>
+<p>那么，上面的语句中我们可以得知</p>
+<p>Grouping Operator 中的赋值语句返回的是 foot.bar 的函数值（「Value」）<br>该函数执行的上下文作用域为 window<br>那么，在该函数中执行获取 this.x 也就是获取 window.x 的值。因此，这条语句返回的就是 10 。如果还不理解，考虑下面的代码段</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</div><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.x; <span class="comment">// 这里会返回什么？</span></div><div class="line">})();</div></pre></td></tr></table></figure>
 
-<p>然后你应该这样使用它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Rockin in heaven: '</span> + rocker[<span class="number">2</span>]); <span class="comment">//Rockin in heaven: Ronnie James Dio</span></div></pre></td></tr></table></figure>
+<p>如果理解了上面的语句的前因后果，那么题目中的语句 4. 就能举一反三给推导出来。首先我们来了解逗号运算符（「,」）的定义，我们就可以得之语句</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(foo.bar, foo.bar)</div></pre></td></tr></table></figure>
 
-<p>现在你应该找到要点了 - 如果你想要你的模块成为一个特别的对象类型，那么使用module.exports；如果你希望你的模块成为一个传统的模块实例（module instance），使用exports。</p>
-<p>把属性赋予module.exports的结果与把属性赋予给exports是一样的。看下面这个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
+<p>返回的也是 foo.bar 的值「Value」而非引用「Reference」，那么接下来的事情其实就是和语句 3. 一样的了。因此，语句 4. 返回的液是 window.x 的值，也就是 10 。</p>
+<p>总结下，那么上面的输出总的来说是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">20</span> <span class="number">20</span> <span class="number">10</span> <span class="number">10</span></div></pre></td></tr></table></figure>
 
-<p>下面这个做的是一样的事情：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
-
-<p>但是请注意，它们并不是一样的东西。就像我之前说的module.exports是真实存在的东西，exports只是它的辅助方法。话虽如此，exports还是推荐的对象，除非你想把你模块 的对象类型从传统的模块实例（module instance）修改为其他的。</p>
-<p>希望这篇文章能帮助你理解exports和module.exports之间的不同，并且能进一步的理解模块在Node.js中是怎么工作的。</p>
-<h2 id="转载">转载</h2>
-<p><em>转载地址</em> ：<a href="http://weizhifeng.net/node-js-exports-vs-module-exports.html" target="_blank" rel="external">http://weizhifeng.net/node-js-exports-vs-module-exports.html</a><br><em>英文原址</em> ：<a href="http://www.hacksparrow.com/node-js-exports-vs-module-exports.html" target="_blank" rel="external">http://www.hacksparrow.com/node-js-exports-vs-module-exports.html</a></p>
+<hr>
+<p>似乎目前为止，我们已经完全回答出了当初设定的问题。但恐怕会留下疑虑，就是传值「Value」和引用「Reference」之间到低有何不同、函数的作用域以及 this 的指向是否已经真正了解？</p>
+<p>是的，这个题目已经完了，而我们的问题似乎还是没有怎麽搞清楚。OK，下次我们来详细讨论下这个问题…</p>
+<p><a href="http://www.gracecode.com/posts/3018.html" target="_blank" rel="external">引用地址1</a><br><a href="http://www.gracecode.com/posts/3019.html" target="_blank" rel="external">引用地址2</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/nodejs/">nodejs</a>
+  <span></span> <a href="/tags/js/">js</a>
   </div>
 
 
@@ -148,7 +196,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://elevensky.github.io/2015/02/25/nodejs中exports和module-exports区别/" data-title="nodejs中exports和module.exports区别 | 程序员的多肉花园" data-tsina="null" class="share clearfix">
+  <div data-url="http://elevensky.github.io/2015/03/31/what-is-this/" data-title="what is &#39;this&#39;? | 程序员的多肉花园" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -158,18 +206,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/02/25/你是否强大到不需要信仰/" title="你是否强大到不需要信仰">
+ <a href="/2015/04/01/Array-prototype-slice-call-arguments/" title="Array.prototype.slice.call(arguments)">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  你是否强大到不需要信仰</span>
+  Array.prototype.slice.call(arguments)</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/02/25/nodejs基础教程/"  title="Node.js 概述">
+<a href="/2015/03/24/简析Javascript的prototype和__proto__/"  title="简析Javascript的prototype和__proto__">
  <strong>NEXT:</strong><br/> 
- <span>Node.js 概述
+ <span>简析Javascript的prototype和__proto__
 </span>
 </a>
 </div>
@@ -179,7 +227,7 @@
 	
 <section id="comment">
   <h1 class="title">文章评论</h1>
-  <div class="ds-thread" data-thread-key="2015/02/25/nodejs中exports和module-exports区别/" data-title="nodejs中exports和module.exports区别" data-url="http://elevensky.github.io/2015/02/25/nodejs中exports和module-exports区别/"></div>
+  <div class="ds-thread" data-thread-key="2015/03/31/what-is-this/" data-title="what is &#39;this&#39;?" data-url="http://elevensky.github.io/2015/03/31/what-is-this/"></div>
 </section>
 
 
@@ -188,7 +236,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js中exports和module-exports有什么不同？"><span class="toc-number">1.</span> <span class="toc-text">Node.js中exports和module.exports有什么不同？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转载"><span class="toc-number">2.</span> <span class="toc-text">转载</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">

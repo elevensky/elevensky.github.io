@@ -1,0 +1,541 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>js中的变量以及如何定义静态变量 | 程序员的多肉花园</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="elevensky">
+    
+    <meta name="description" content="Javascript的变量只有全局作用域和函数作用域，没有其它语言中常见的块作用域，也就是在（）和｛｝作用域中的变量。变量从其声明（var myVar）或首次赋值（此前未声明）之处起开始处进入其生命期。有些文章认为在Javascript函数中，变量即用即声明是bad practice，因为只要在函数">
+    
+    
+      <meta name="keywords" content="静态变量,Web,前端,JavaScript,html5,css3">
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+</head>
+
+  <body>
+    <header>
+      <div style="position:relative;">
+			
+				<div class="line">
+					<span></span>
+					<div class="author"></div>
+				</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="程序员的多肉花园">程序员的多肉花园</a></h1>
+				<h2 class="blog-motto">hello world, hello 多肉</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">首页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:elevensky.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/04/05/js中的变量以及如何定义静态变量/" title="js中的变量以及如何定义静态变量" itemprop="url">js中的变量以及如何定义静态变量</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://elevensky.github.io" title="elevensky">elevensky</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-04-05T04:41:19.000Z" itemprop="datePublished">4月 5 2015</time>
+    更新日期:<time datetime="2015-04-05T04:46:07.000Z" itemprop="dateModified">4月 5 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+		</div>
+		
+		<p>Javascript的变量只有全局作用域和函数作用域，没有其它语言中常见的块作用域，也就是在（）和｛｝作用域中的变量。<br>变量从其声明（var myVar）或首次赋值（此前未声明）之处起开始处进入其生命期。有些文章认为在Javascript函数中，变量即用即声明是bad practice，因为只要在函数中任意地方声明了某个变量，该变量即在函数开头处就进入了其生命期，因此best practice是前向声明。但是下面代码的运行结果（在firebug中）显示变量仍然是从其声明处进入生命期的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHi2</span><span class="params">()</span></span>{</div><div class="line">    <span class="built_in">console</span>.log(myVar);    <span class="comment">//this line will comlain myVar is not defined</span></div><div class="line">    <span class="keyword">var</span> myVar = <span class="number">20</span>;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"after:"</span> + myVar);</div><div class="line">}</div><div class="line"></div><div class="line">sayHi2();</div></pre></td></tr></table></figure>
+
+<p>通过下面两种方式产生一个全局作用域的变量：</p>
+<ol>
+<li><p>在任何函数体之外通过var关键字声明的变量；</p>
+</li>
+<li><p>在任何地方（函数体内或者函数体外），对一个从未声明过的标识符赋值，从而使其成为一个变量。</p>
+</li>
+</ol>
+<p>全局变量实际上是宿主对象的成员变量。比如在浏览器环境下，全局变量myVar实际上等于window.myVar。</p>
+<p>构造函数中的变量</p>
+<p>Javascript中的构造函数并没有特别的形式和限定。一般程序员会将一个函数名的首字母置为大写，如果他想将该函数当作构造函数使用的话。下面是构造函数一例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Person = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="keyword">var</span> a = <span class="number">0</span>;    <span class="comment">//声明了一个局部变量，在构造函数外任何地方都无法使用它</span></div><div class="line">    b = <span class="number">1</span>;        <span class="comment">//产生了一个全局变量</span></div><div class="line">    <span class="keyword">this</span>.c = <span class="number">2</span>;   <span class="comment">//产生了一个成员变量</span></div><div class="line">    <span class="keyword">this</span>.funcA = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{<span class="built_in">console</span>.log(<span class="string">"funcA"</span>);};  <span class="comment">//成员函数</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">funcB</span><span class="params">()</span></span>{ <span class="comment">//函数也是对象。因此，这个定义实际上声明了一个局部变量，构造函数以外任何地方都无法引用它</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">"funcB"</span>);</div><div class="line">    }</div><div class="line">};</div><div class="line"></div><div class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> Person ();</div><div class="line"><span class="built_in">console</span>.dir(p);</div></pre></td></tr></table></figure>
+
+<p>一般说来，构造函数只应该包含简单的赋值和函数定义（注：函数定义一般应移出构造函数，并声明在其prototype属性上）。上例的目的是为了演示函数中的变量作用域。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">()</span> </span>{</div><div class="line">    foo.counter = foo.counter || <span class="number">0</span>;  <span class="comment">// 将计数器初始化为0</span></div><div class="line">    foo.counter++;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(foo.counter);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;=<span class="number">5</span>; i++){</div><div class="line">    foo();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>上述代码运行结果（在firebug控制台中）是列出了变量c和函数funcA。注意，上述示例中var a和函数funcB的声明仍然可能是有意义的。它们可以用作构造函数中使用的辅助变量和辅助函数。</p>
+<p>在C语言，以及c++在某些情况下，从函数中返回一个非基本类型的局部变量通常是不允许的。因为c/c++是按值传递，当函数结束时，其堆栈被复 位。基本类型（如int，char）其值可以直接按值传递出去，不会产生任何问题，但其它变量如果是按地址传递的话，其地址由于在堆栈中，因此该变量的数 据会随堆栈的复位而消亡。但在Javascript，Java和C#等语言中，这样做是允许的。理论上它们仍然是传值型语言，但由于它们传递的是变量的引 用，而变量始终产生在堆上（没有明确的语言规范和教程说明Javascript的变量位置），因此函数结束后，变量要么被回收（没有被引用的情况下），要 么继续有效。</p>
+<p>静态变量</p>
+<p>一众语言都支持静态变量，但遗憾的是Javascript并不支持。好在仍然有方法可以模拟出静态变量。静态变量的实质是它是函数作用域，但又不随每次进入函数体而被初始化。由于Javascript中函数本身也是一种对象，因此可以这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">()</span> </span>{</div><div class="line">    foo.counter = foo.counter || <span class="number">0</span>;  <span class="comment">// 将计数器初始化为0</span></div><div class="line">    foo.counter++;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(foo.counter);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;=<span class="number">5</span>; i++){</div><div class="line">    foo();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>运行结果为输出1～6个数字。如果是匿名函数的话，可以用arguments.callee来代替函数名：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">arguments</span>.callee.counter = <span class="built_in">arguments</span>.callee.counter || <span class="number">0</span>;  <span class="comment">// 将计数器初始化为0</span></div><div class="line">    <span class="built_in">arguments</span>.callee.counter++;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(<span class="built_in">arguments</span>.callee.counter);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;=<span class="number">5</span>; i++){</div><div class="line">    foo();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>this变量</p>
+<p>在函数（不包括构造函数）中使用this变量，this的值需要等到函数调用时，由其上下文环境确定。</p>
+<p>在构造函数中使用this，其结果是引用到由构造函数通过new生成的那个对象上。</p>
+<p>在字面量对象中定义的函数，this引用到字面量生成的对象上。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> my = {</div><div class="line">    init : <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>);</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>._done_ != <span class="string">'undefined'</span>){</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">"already inited."</span>);</div><div class="line">        }<span class="keyword">else</span>{</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">"not inited."</span>);</div><div class="line">            <span class="keyword">this</span>._done_ = <span class="literal">true</span>;</div><div class="line">        }</div><div class="line">    }</div><div class="line">}</div><div class="line">my.init();</div><div class="line">my.init();</div></pre></td></tr></table></figure>
+
+<p>第一次运行my.init()的结果显示“not inited”，但第二次运行的结果就是”already inited.”。同时，结果显示this为一个Object，而非Window。因此，只要在字面量对象内声明的函数，this都会始终绑定到当前的字 面量对象上，无论是在：｛｝还是在其中的函数声明中。但要注意，this无法传递。即如果将this传递给一个函数作为参数，则在函数内部访问到的 this，并不一定是传入的this值。</p>
+<p>但是，值得注意的是，在字面量对象的属性表达式中使用this，此时this并非引用到字面量对象，而是当前定义字面量的作用域对象上。比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> my = {</div><div class="line">    mem : <span class="string">"hello"</span>,</div><div class="line">    msg  : <span class="keyword">this</span>.mem + <span class="string">" world!"</span></div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>console.log(my.msg);<br>上例会显示’undefined world’。这是因为this引用到window对象上，而当前window对象中并无mem这一属性。<br>在众多的Javascript编程书籍中，没有一本提到上面的例子，这不能不说是个遗憾。使用字面量对象来构建程序中的单例对象是一种较普通的设计模式， 在定义某些变量时，不可避免地要用到其它变量。比如在定义环境配置时，常常会先定义一个home，再定义一些相对于该home的path。但是这里没有捷 径可走。下面的定义都会引起运行时错误：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> my= {</div><div class="line">    home : <span class="string">"http://home"</span>,</div><div class="line">    jsdir: my.home + <span class="string">"/js"</span>,</div><div class="line">    init : <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">"init"</span>);</div><div class="line">    },</div><div class="line"></div><div class="line">    start : <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">"start"</span>);</div><div class="line">        my.init();</div><div class="line">    }</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>my.start();<br>错误的原因可能是因为，上述语句作为一个词句执行，因此当为jsDir/imgDir赋值时，对象my还没有创建起来，因此还不能引用 my.home。而使用this之所以错误的原因，则已经在前面讲过了。然而，如果去掉第2行，则该代码可以运行，尽管我们看到第8行也引用到了 my.init();这是因为，第8行只是定义，并非执行；而第2行时需要立即对my.home进行求值，所以会发现my没有定义。这是在firebug 中看到的行为，是否有某些brower并非如此，待考。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/语法/">语法</a>
+  </div>
+
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/-categories-frontend/">前端</a>
+</div>
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://elevensky.github.io/2015/04/05/js中的变量以及如何定义静态变量/" data-title="js中的变量以及如何定义静态变量 | 程序员的多肉花园" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2015/04/01/Array-prototype-slice-call-arguments/"  title="Array.prototype.slice.call(arguments)">
+ <strong>NEXT:</strong><br/> 
+ <span>Array.prototype.slice.call(arguments)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comment">
+  <h1 class="title">文章评论</h1>
+  <div class="ds-thread" data-thread-key="2015/04/05/js中的变量以及如何定义静态变量/" data-title="js中的变量以及如何定义静态变量" data-url="http://elevensky.github.io/2015/04/05/js中的变量以及如何定义静态变量/"></div>
+</section>
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+			<li><a href="/categories/frontend/" title="frontend">frontend<sup>1</sup></a></li>
+		
+			<li><a href="/categories/life/" title="life">life<sup>1</sup></a></li>
+		
+			<li><a href="/categories/-categories-frontend/" title="前端">前端<sup>7</sup></a></li>
+		
+			<li><a href="/categories/-categories-duorou/" title="多肉">多肉<sup>1</sup></a></li>
+		
+			<li><a href="/categories/生活/" title="生活">生活<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/gulp/" title="gulp">gulp<sup>1</sup></a></li>
+		
+			<li><a href="/tags/js/" title="js">js<sup>3</sup></a></li>
+		
+			<li><a href="/tags/life/" title="life">life<sup>1</sup></a></li>
+		
+			<li><a href="/tags/nodejs/" title="nodejs">nodejs<sup>3</sup></a></li>
+		
+			<li><a href="/tags/语法/" title="语法">语法<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  
+<div class="categorieslist">
+  <h3 class="asidetitle">近期文章</h3>
+  <ul>
+    
+      <li>
+        <a href="/2015/04/05/js中的变量以及如何定义静态变量/">js中的变量以及如何定义静态变量</a>
+      </li>
+    
+      <li>
+        <a href="/2015/04/01/Array-prototype-slice-call-arguments/">Array.prototype.slice.call(arguments)</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/31/what-is-this/">what is &#39;this&#39;?</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/24/简析Javascript的prototype和__proto__/">简析Javascript的prototype和__proto__</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/23/nodejs学习笔记/">nodejs学习笔记</a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/12/nodejs模块机制/"></a>
+      </li>
+    
+      <li>
+        <a href="/2015/03/05/mac下安装启动mongodb/">mac下安装启动mongodb</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/27/js继承机制/">js继承机制</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/25/你是否强大到不需要信仰/">你是否强大到不需要信仰</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/25/nodejs中exports和module-exports区别/">nodejs中exports和module.exports区别</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/25/nodejs基础教程/">Node.js 概述</a>
+      </li>
+    
+      <li>
+        <a href="/2015/02/22/你是船长/">你是船长，你必须在黑暗中发出微光！</a>
+      </li>
+    
+  </ul>
+</div>
+
+
+  <iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=0&uid=1722627987&verifier=85fa2548&dpc=1"></iframe>
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><canvas id="canvas"></canvas>
+<div id="footer">
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015
+		
+		<a href="http://elevensky.github.io" target="_blank" title="elevensky">elevensky</a>
+		
+		<br />
+		<span style="color:#817c7c">My heart is beating just for you</span>
+		</p>
+</div>
+<script>
+	window.requestAnimFrame = (function(){
+	  return  window.requestAnimationFrame       ||
+	          window.webkitRequestAnimationFrame ||
+	          window.mozRequestAnimationFrame    ||
+	          function( callback ){
+	            window.setTimeout(callback, 1000 / 60);
+	          };
+	})();
+
+	var canvas = document.getElementById('canvas'),
+		context = canvas.getContext('2d'),
+		width = canvas.width = document.body.offsetWidth,
+		height = canvas.height,
+		ball = {
+			x: 0,
+			y: height / 2,
+		},
+		point = {
+			x: 0,
+			y: ball.y
+		},
+		current_point = 0;
+
+	var points = [
+			{y:0,x:20},
+			{y:0,x:1},
+	        {y:3,x:1},
+		    {y:-10,x:2},
+			{y:10,x:2},
+		    {y:-12,x:3},
+		    {y:35,x:5},
+		    {y:-25,x:4},
+		    {y:14,x:3},
+		    {y:5,x:2},
+			{y:0,x:1},
+			{y:0,x:20}
+		];
+	context.fillStyle = "rgb(31, 31, 31)";
+	render();
+	function animateTo() {
+		function dist(x1,x2,y1,y2) {
+			var dx = x1 - x2,
+				dy = y1 - y2;
+			return {
+				d: Math.sqrt(dx*dx + dy*dy),
+				dx: dx,
+				dy: dy
+			};
+		}
+		var dis = dist(ball.x, point.x+points[current_point].x,ball.y, point.y+points[current_point].y);
+		if( dis.d > 1 ) {
+			var s = Math.abs(dis.dy) > 13 ? 2 : 1;
+			ball.x += -( dis.dx / dis.d )*s;
+			ball.y += -( dis.dy / dis.d )*s;
+		} else {
+			ball.x = point.x+points[current_point].x;
+			ball.y = point.y+points[current_point].y;
+			point.x += points[current_point].x;
+			current_point++;
+			if( current_point >= points.length || ball.x > width ) {
+				current_point = 0;
+				if( ball.x > width ) {
+					point.x = ball.x = 0;
+				}
+			}
+		}
+	}
+	function render() {
+		requestAnimFrame(render);
+		animateTo();
+		context.fillStyle = "rgba(0, 0, 0, .01)";
+		context.fillRect(0,0,width,height);
+		context.fillStyle = "rgba(255, 0, 0, 1)";
+		context.beginPath();
+		context.arc(ball.x, ball.y, 1, 0, 2*Math.PI, true);
+		context.closePath();
+		context.fill();
+	}
+</script></footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize();
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+      
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"elevensky"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+});
+</script>
+
+
+
+  </body>
+</html>

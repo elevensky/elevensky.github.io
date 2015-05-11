@@ -4,7 +4,7 @@
   <subtitle><![CDATA[hello world, hello 多肉]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://elevensky.github.io/"/>
-  <updated>2015-02-26T04:08:45.805Z</updated>
+  <updated>2015-04-05T04:46:18.656Z</updated>
   <id>http://elevensky.github.io/</id>
   
   <author>
@@ -13,6 +13,380 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[js中的变量以及如何定义静态变量]]></title>
+    <link href="http://elevensky.github.io/2015/04/05/js%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F/"/>
+    <id>http://elevensky.github.io/2015/04/05/js中的变量以及如何定义静态变量/</id>
+    <published>2015-04-05T04:41:19.000Z</published>
+    <updated>2015-04-05T04:46:07.000Z</updated>
+    <content type="html"><![CDATA[<p>Javascript的变量只有全局作用域和函数作用域，没有其它语言中常见的块作用域，也就是在（）和｛｝作用域中的变量。<br>变量从其声明（var myVar）或首次赋值（此前未声明）之处起开始处进入其生命期。有些文章认为在Javascript函数中，变量即用即声明是bad practice，因为只要在函数中任意地方声明了某个变量，该变量即在函数开头处就进入了其生命期，因此best practice是前向声明。但是下面代码的运行结果（在firebug中）显示变量仍然是从其声明处进入生命期的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHi2</span><span class="params">()</span></span>{</div><div class="line">    <span class="built_in">console</span>.log(myVar);    <span class="comment">//this line will comlain myVar is not defined</span></div><div class="line">    <span class="keyword">var</span> myVar = <span class="number">20</span>;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"after:"</span> + myVar);</div><div class="line">}</div><div class="line"></div><div class="line">sayHi2();</div></pre></td></tr></table></figure>
+
+<p>通过下面两种方式产生一个全局作用域的变量：</p>
+<ol>
+<li><p>在任何函数体之外通过var关键字声明的变量；</p>
+</li>
+<li><p>在任何地方（函数体内或者函数体外），对一个从未声明过的标识符赋值，从而使其成为一个变量。</p>
+</li>
+</ol>
+<p>全局变量实际上是宿主对象的成员变量。比如在浏览器环境下，全局变量myVar实际上等于window.myVar。</p>
+<p>构造函数中的变量</p>
+<p>Javascript中的构造函数并没有特别的形式和限定。一般程序员会将一个函数名的首字母置为大写，如果他想将该函数当作构造函数使用的话。下面是构造函数一例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Person = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="keyword">var</span> a = <span class="number">0</span>;    <span class="comment">//声明了一个局部变量，在构造函数外任何地方都无法使用它</span></div><div class="line">    b = <span class="number">1</span>;        <span class="comment">//产生了一个全局变量</span></div><div class="line">    <span class="keyword">this</span>.c = <span class="number">2</span>;   <span class="comment">//产生了一个成员变量</span></div><div class="line">    <span class="keyword">this</span>.funcA = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{<span class="built_in">console</span>.log(<span class="string">"funcA"</span>);};  <span class="comment">//成员函数</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">funcB</span><span class="params">()</span></span>{ <span class="comment">//函数也是对象。因此，这个定义实际上声明了一个局部变量，构造函数以外任何地方都无法引用它</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">"funcB"</span>);</div><div class="line">    }</div><div class="line">};</div><div class="line"></div><div class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> Person ();</div><div class="line"><span class="built_in">console</span>.dir(p);</div></pre></td></tr></table></figure>
+
+<p>一般说来，构造函数只应该包含简单的赋值和函数定义（注：函数定义一般应移出构造函数，并声明在其prototype属性上）。上例的目的是为了演示函数中的变量作用域。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">()</span> </span>{</div><div class="line">    foo.counter = foo.counter || <span class="number">0</span>;  <span class="comment">// 将计数器初始化为0</span></div><div class="line">    foo.counter++;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(foo.counter);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;=<span class="number">5</span>; i++){</div><div class="line">    foo();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>上述代码运行结果（在firebug控制台中）是列出了变量c和函数funcA。注意，上述示例中var a和函数funcB的声明仍然可能是有意义的。它们可以用作构造函数中使用的辅助变量和辅助函数。</p>
+<p>在C语言，以及c++在某些情况下，从函数中返回一个非基本类型的局部变量通常是不允许的。因为c/c++是按值传递，当函数结束时，其堆栈被复 位。基本类型（如int，char）其值可以直接按值传递出去，不会产生任何问题，但其它变量如果是按地址传递的话，其地址由于在堆栈中，因此该变量的数 据会随堆栈的复位而消亡。但在Javascript，Java和C#等语言中，这样做是允许的。理论上它们仍然是传值型语言，但由于它们传递的是变量的引 用，而变量始终产生在堆上（没有明确的语言规范和教程说明Javascript的变量位置），因此函数结束后，变量要么被回收（没有被引用的情况下），要 么继续有效。</p>
+<p>静态变量</p>
+<p>一众语言都支持静态变量，但遗憾的是Javascript并不支持。好在仍然有方法可以模拟出静态变量。静态变量的实质是它是函数作用域，但又不随每次进入函数体而被初始化。由于Javascript中函数本身也是一种对象，因此可以这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">()</span> </span>{</div><div class="line">    foo.counter = foo.counter || <span class="number">0</span>;  <span class="comment">// 将计数器初始化为0</span></div><div class="line">    foo.counter++;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(foo.counter);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;=<span class="number">5</span>; i++){</div><div class="line">    foo();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>运行结果为输出1～6个数字。如果是匿名函数的话，可以用arguments.callee来代替函数名：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">arguments</span>.callee.counter = <span class="built_in">arguments</span>.callee.counter || <span class="number">0</span>;  <span class="comment">// 将计数器初始化为0</span></div><div class="line">    <span class="built_in">arguments</span>.callee.counter++;</div><div class="line"></div><div class="line">    <span class="built_in">console</span>.log(<span class="built_in">arguments</span>.callee.counter);</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt;=<span class="number">5</span>; i++){</div><div class="line">    foo();</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>this变量</p>
+<p>在函数（不包括构造函数）中使用this变量，this的值需要等到函数调用时，由其上下文环境确定。</p>
+<p>在构造函数中使用this，其结果是引用到由构造函数通过new生成的那个对象上。</p>
+<p>在字面量对象中定义的函数，this引用到字面量生成的对象上。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> my = {</div><div class="line">    init : <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>);</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="keyword">this</span>._done_ != <span class="string">'undefined'</span>){</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">"already inited."</span>);</div><div class="line">        }<span class="keyword">else</span>{</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">"not inited."</span>);</div><div class="line">            <span class="keyword">this</span>._done_ = <span class="literal">true</span>;</div><div class="line">        }</div><div class="line">    }</div><div class="line">}</div><div class="line">my.init();</div><div class="line">my.init();</div></pre></td></tr></table></figure>
+
+<p>第一次运行my.init()的结果显示“not inited”，但第二次运行的结果就是”already inited.”。同时，结果显示this为一个Object，而非Window。因此，只要在字面量对象内声明的函数，this都会始终绑定到当前的字 面量对象上，无论是在：｛｝还是在其中的函数声明中。但要注意，this无法传递。即如果将this传递给一个函数作为参数，则在函数内部访问到的 this，并不一定是传入的this值。</p>
+<p>但是，值得注意的是，在字面量对象的属性表达式中使用this，此时this并非引用到字面量对象，而是当前定义字面量的作用域对象上。比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> my = {</div><div class="line">    mem : <span class="string">"hello"</span>,</div><div class="line">    msg  : <span class="keyword">this</span>.mem + <span class="string">" world!"</span></div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>console.log(my.msg);<br>上例会显示’undefined world’。这是因为this引用到window对象上，而当前window对象中并无mem这一属性。<br>在众多的Javascript编程书籍中，没有一本提到上面的例子，这不能不说是个遗憾。使用字面量对象来构建程序中的单例对象是一种较普通的设计模式， 在定义某些变量时，不可避免地要用到其它变量。比如在定义环境配置时，常常会先定义一个home，再定义一些相对于该home的path。但是这里没有捷 径可走。下面的定义都会引起运行时错误：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> my= {</div><div class="line">    home : <span class="string">"http://home"</span>,</div><div class="line">    jsdir: my.home + <span class="string">"/js"</span>,</div><div class="line">    init : <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">"init"</span>);</div><div class="line">    },</div><div class="line"></div><div class="line">    start : <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">"start"</span>);</div><div class="line">        my.init();</div><div class="line">    }</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>my.start();<br>错误的原因可能是因为，上述语句作为一个词句执行，因此当为jsDir/imgDir赋值时，对象my还没有创建起来，因此还不能引用 my.home。而使用this之所以错误的原因，则已经在前面讲过了。然而，如果去掉第2行，则该代码可以运行，尽管我们看到第8行也引用到了 my.init();这是因为，第8行只是定义，并非执行；而第2行时需要立即对my.home进行求值，所以会发现my没有定义。这是在firebug 中看到的行为，是否有某些brower并非如此，待考。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>Javascript的变量只有全局作用域和函数作用域，没有其它语言中常见的块作用域，也就是在（）和｛｝作用域中的变量。<br>变量从其声明（var myVar）或首次赋值（此前未声明）之处起开始处进入其生命期。有些文章认为在Javascript函数中，变量即用即声明是bad]]>
+    </summary>
+    
+      <category term="语法" scheme="http://elevensky.github.io/tags/%E8%AF%AD%E6%B3%95/"/>
+    
+      <category term="前端" scheme="http://elevensky.github.io/categories/-categories-frontend/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Array.prototype.slice.call(arguments)]]></title>
+    <link href="http://elevensky.github.io/2015/04/01/Array-prototype-slice-call-arguments/"/>
+    <id>http://elevensky.github.io/2015/04/01/Array-prototype-slice-call-arguments/</id>
+    <published>2015-04-01T00:47:07.000Z</published>
+    <updated>2015-04-01T00:50:40.000Z</updated>
+    <content type="html"><![CDATA[<p>我们知道，Array.prototype.slice.call(arguments)能将具有length属性的对象转成数组，除了IE下的节点集合（因为ie下的dom对象是以com对象的形式实现的，js对象与com对象不能进行转换）<br>如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a={length:<span class="number">2</span>,<span class="number">0</span>:<span class="string">'first'</span>,<span class="number">1</span>:<span class="string">'second'</span>};</div><div class="line"><span class="built_in">Array</span>.prototype.slice.call(a);<span class="comment">//  ["first", "second"]</span></div><div class="line"></div><div class="line"> <span class="keyword">var</span> a={length:<span class="number">2</span>};</div><div class="line"> <span class="built_in">Array</span>.prototype.slice.call(a);<span class="comment">//  [undefined, undefined]</span></div></pre></td></tr></table></figure>
+
+<p>可能刚开始学习js的童鞋并不是很能理解这句为什么能实现这样的功能。比如我就是一个，所以，来探究一下。</p>
+<p>首先，slice有两个用法，一个是String.slice,一个是Array.slice，第一个返回的是字符串，第二个返回的是数组，这里我们看第2个。</p>
+<p>Array.prototype.slice.call(arguments)能够将arguments转成数组，那么就是arguments.toArray().slice();到这里，是不是就可以说Array.prototype.slice.call(arguments)的过程就是先将传入进来的第一个参数转为数组，再调用slice？</p>
+<p>再看call的用法，如下例子:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">     <span class="built_in">console</span>.log(<span class="keyword">this</span>);    <span class="comment">// 'littledu'</span></div><div class="line">     <span class="built_in">console</span>.log(<span class="keyword">typeof</span> <span class="keyword">this</span>);      <span class="comment">//  Object</span></div><div class="line">     <span class="built_in">console</span>.log(<span class="keyword">this</span> <span class="keyword">instanceof</span> <span class="built_in">String</span>);    <span class="comment">// true</span></div><div class="line">}</div><div class="line">a.call(<span class="string">'littledu'</span>);</div></pre></td></tr></table></figure>
+
+<p>可以看出，call了后，就把当前函数推入所传参数的作用域中去了，不知道这样说对不对，但反正this就指向了所传进去的对象就肯定的了。<br>到这里，基本就差不多了，我们可以大胆猜一下slice的内部实现，如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.prototype.slice = <span class="function"><span class="keyword">function</span><span class="params">(start,end)</span></span>{</div><div class="line">     <span class="keyword">var</span> result = <span class="keyword">new</span> <span class="built_in">Array</span>();</div><div class="line">     start = start || <span class="number">0</span>;</div><div class="line">     end = end || <span class="keyword">this</span>.length; <span class="comment">//this指向调用的对象，当用了call后，能够改变this的指向，也就是指向传进来的对象，这是关键</span></div><div class="line">     <span class="keyword">for</span>(<span class="keyword">var</span> i = start; i &lt; end; i++){</div><div class="line">          result.push(<span class="keyword">this</span>[i]);</div><div class="line">     }</div><div class="line">     <span class="keyword">return</span> result;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>大概就是这样吧，理解就行，不深究。</p>
+<p>最后，附个转成数组的通用函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> toArray = <span class="function"><span class="keyword">function</span><span class="params">(s)</span></span>{</div><div class="line">    <span class="keyword">try</span>{</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.slice.call(s);</div><div class="line">    } <span class="keyword">catch</span>(e){</div><div class="line">            <span class="keyword">var</span> arr = [];</div><div class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>,len = s.length; i &lt; len; i++){</div><div class="line">                <span class="comment">//arr.push(s[i]);</span></div><div class="line">                   arr[i] = s[i];  <span class="comment">//据说这样比push快</span></div><div class="line">            }</div><div class="line">             <span class="keyword">return</span> arr;</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>我们知道，Array.prototype.slice.call(arguments)能将具有length属性的对象转成数组，除了IE下的节点集合（因为ie下的dom对象是以com对象的形式实现的，js对象与com对象不能进行转换）<br>如：</p>
+<figure cla]]>
+    </summary>
+    
+      <category term="js" scheme="http://elevensky.github.io/tags/js/"/>
+    
+      <category term="前端" scheme="http://elevensky.github.io/categories/-categories-frontend/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[what is 'this'?]]></title>
+    <link href="http://elevensky.github.io/2015/03/31/what-is-this/"/>
+    <id>http://elevensky.github.io/2015/03/31/what-is-this/</id>
+    <published>2015-03-31T03:51:39.000Z</published>
+    <updated>2015-03-31T06:11:53.000Z</updated>
+    <content type="html"><![CDATA[<p>呃，这次的标题有些「装逼」，首先我们从道题目开始。</p>
+<p>这是道有趣的题目：考虑下面的代码，考虑 console.log 输出的值：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</div><div class="line"><span class="keyword">var</span> foo = {</div><div class="line">    x: <span class="number">20</span>,</div><div class="line">    bar: <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>{</div><div class="line">        <span class="keyword">var</span> x = <span class="number">30</span>;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.x;</div><div class="line">    }</div><div class="line">};</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(</div><div class="line">    foo.bar(),             <span class="comment">// 1.</span></div><div class="line">    (foo.bar)(),           <span class="comment">// 2.</span></div><div class="line">    (foo.bar = foo.bar)(), <span class="comment">// 3.</span></div><div class="line">    (foo.bar, foo.bar)()   <span class="comment">// 4.</span></div><div class="line">);</div></pre></td></tr></table></figure>
+
+<p>实际上，题目真正意思求 console.log 中依次四条语句的值。为了方便讲述，上面的语句分别标注为 1-4。</p>
+<p>首先，是「1.」这条语句相对来说比较明朗（其实我们也经常这样写）。调用 foo 的 bar 方法，因此 bar 的 this 指向（作用域）为 foo，因此就等于是取 foo 上面的 x 属性（也就是 foo.x）的值，那么语句返回的值就是 20 。</p>
+<p>然后是「2.」这条语句。我们可能对 Grouping Operator （也就是「()」）犹豫不决，那 么我们找找 ECMA 中相关定义 ：</p>
+<blockquote>
+<p>11.1.6 The Grouping Operator</p>
+<p>The production PrimaryExpression : ( Expression ) is evaluated as follows:</p>
+<blockquote>
+<ol>
+<li>Evaluate Expression. This may be of type Reference.</li>
+<li>Return Result(1).</li>
+</ol>
+</blockquote>
+<p>NOTE</p>
+<p>This algorithm does not apply GetValue to Result(1). The principal<br>motivation for this is so that operators such as delete and typeof<br>may be applied to parenthesised expressions.</p>
+</blockquote>
+<p>因此，由于 foo.bar 是个引用「Reference」，所以使用组操作符 (foo.bar) 返回 的引用是和 foo.bar 是一样的。</p>
+<p>如果还不理解，那么考虑下面的表达式：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(foo.bar === (foo.bar))</div></pre></td></tr></table></figure>
+
+<p>因此，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(foo.bar)();</div></pre></td></tr></table></figure>
+
+<p>返回的也是 foo.x 的值，也就是 20 。</p>
+<p>我们考虑语句 3. 和上面的两个语句有什么不同</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(foo.bar = foo.bar)(), <span class="comment">// 3.</span></div></pre></td></tr></table></figure>
+
+<p>相比语句 2.，语句 3. 中的 Grouping Operator 中有赋值（「=」）语句。那么，我们首先得明白赋值语句干了啥，继续 参考对应的 ECMA 文档</p>
+<blockquote>
+<p>11.13.1 Simple Assignment (= )</p>
+<p>The production</p>
+<blockquote>
+<p>   AssignmentExpression : LeftHandSideExpression = AssignmentExpression</p>
+</blockquote>
+<p>is evaluated as follows:</p>
+<blockquote>
+<ol>
+<li>Evaluate LeftHandSideExpression.</li>
+<li>Evaluate AssignmentExpression.<br>3.Call GetValue(Result(2)).<br>4.Call PutValue(Result(1), Result(3)).<br>5.Return Result(3).</li>
+</ol>
+</blockquote>
+</blockquote>
+<p>其中，最重要的步骤就是 PutValue，我们 继续刨根问底</p>
+<blockquote>
+<p>8.7.2 PutValue(V, W)</p>
+<blockquote>
+<ol>
+<li>If Type(V) is not Reference, throw a<br>ReferenceError exception.</li>
+<li>Call GetBase(V).</li>
+<li>If Result(2) is null, go to step 6.</li>
+<li>Call the [[Put]] method of Result(2), passing GetPropertyName(V)<br>for the property name and W for the value.</li>
+<li>Return.</li>
+<li>Call the [[Put]] method for the global object, passing<br>GetPropertyName(V) for the property name and W for the value.</li>
+<li>Return.<br>所以，我们根据上面的定义可以得知，语句返回的是 foo.bar 的函数值。因此，赋值操作符返回的是「值（Value）」而不是「引用（Reference）」。</li>
+</ol>
+</blockquote>
+</blockquote>
+<p>因为函数体需要 this 值获取 x 属性的值，那么接下来我们考虑改函数时调用时的上下文作用域以及背后的具体流程。 尤其注意第七条规则</p>
+<blockquote>
+<ol>
+<li>If Type(Result(1)) is Reference, Result(6) is GetBase( Result(1)).<br> Otherwise, Result(6) is null.</li>
+<li>If Result(6) is an activation object, Result(7) is null. Otherwise,<br> Result(7) is the same as Result(6).</li>
+<li>Call the [[Call]] method on Result(3), providing Result(7) as<br> the this value and providing the list Result(2) as the<br> argument values.</li>
+</ol>
+</blockquote>
+<p>那么在这种情况下，GetBase 操作实际上返回的是 null，因此此条语句函数执行的作用域为 global ，在浏览器中也就是 window 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(foo.bar = foo.bar)()</div></pre></td></tr></table></figure>
+
+<p>那么，上面的语句中我们可以得知</p>
+<p>Grouping Operator 中的赋值语句返回的是 foot.bar 的函数值（「Value」）<br>该函数执行的上下文作用域为 window<br>那么，在该函数中执行获取 this.x 也就是获取 window.x 的值。因此，这条语句返回的就是 10 。如果还不理解，考虑下面的代码段</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">10</span>;</div><div class="line">(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.x; <span class="comment">// 这里会返回什么？</span></div><div class="line">})();</div></pre></td></tr></table></figure>
+
+<p>如果理解了上面的语句的前因后果，那么题目中的语句 4. 就能举一反三给推导出来。首先我们来了解逗号运算符（「,」）的定义，我们就可以得之语句</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(foo.bar, foo.bar)</div></pre></td></tr></table></figure>
+
+<p>返回的也是 foo.bar 的值「Value」而非引用「Reference」，那么接下来的事情其实就是和语句 3. 一样的了。因此，语句 4. 返回的液是 window.x 的值，也就是 10 。</p>
+<p>总结下，那么上面的输出总的来说是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">20</span> <span class="number">20</span> <span class="number">10</span> <span class="number">10</span></div></pre></td></tr></table></figure>
+
+<hr>
+<p>似乎目前为止，我们已经完全回答出了当初设定的问题。但恐怕会留下疑虑，就是传值「Value」和引用「Reference」之间到低有何不同、函数的作用域以及 this 的指向是否已经真正了解？</p>
+<p>是的，这个题目已经完了，而我们的问题似乎还是没有怎麽搞清楚。OK，下次我们来详细讨论下这个问题…</p>
+<p><a href="http://www.gracecode.com/posts/3018.html" target="_blank" rel="external">引用地址1</a><br><a href="http://www.gracecode.com/posts/3019.html" target="_blank" rel="external">引用地址2</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>呃，这次的标题有些「装逼」，首先我们从道题目开始。</p>
+<p>这是道有趣的题目：考虑下面的代码，考虑 console.log 输出的值：</p>
+<figure class="highlight javascript"><table><tr><td class="gut]]>
+    </summary>
+    
+      <category term="js" scheme="http://elevensky.github.io/tags/js/"/>
+    
+      <category term="前端" scheme="http://elevensky.github.io/categories/-categories-frontend/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[简析Javascript的prototype和__proto__]]></title>
+    <link href="http://elevensky.github.io/2015/03/24/%E7%AE%80%E6%9E%90Javascript%E7%9A%84prototype%E5%92%8C__proto__/"/>
+    <id>http://elevensky.github.io/2015/03/24/简析Javascript的prototype和__proto__/</id>
+    <published>2015-03-24T02:40:04.000Z</published>
+    <updated>2015-03-24T03:29:51.000Z</updated>
+    <content type="html"><![CDATA[<p>首先，需要知道以下事实：<br>Javascript的继承是基于原型链模式的。<br>Javascript的原型是一个对象。<br>Javascript的继承本质是一（或多）个对象引用了另一个对象的属性和方法。<br>直接结论：<br><strong>proto</strong> 是对象的一个内部隐藏属性，它的值是该对象的原型。<br>prototype 是函数对象的一个属性，它的值是一个对象（默认为 {} ），当该函数用作构造函数时，新创建对象的原型（<strong>proto</strong>）将指向该属性值。<br>好，show you the code:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="keyword">var</span> A = <span class="function"><span class="keyword">function</span><span class="params">(x)</span></span>{<span class="keyword">this</span>.name = x;};   <span class="comment">//定义函数 A</span></div><div class="line">&gt; <span class="keyword">var</span> a = <span class="keyword">new</span> A(<span class="string">'ima'</span>);     <span class="comment">// 通过函数A创建对象a</span></div><div class="line">&gt; a</div><div class="line">{ name: <span class="string">'ima'</span> }</div><div class="line"></div><div class="line">&gt; A.prototype       <span class="comment">//因为A.prototype默认是 {}</span></div><div class="line">{}</div><div class="line">&gt; a.__proto__       <span class="comment">//所以对象a的原型（__proto__）就是 {}</span></div><div class="line">{}</div><div class="line">&gt; A.prototype === a.__proto__   <span class="comment">//它们都是指向同一个 {}</span></div><div class="line"><span class="literal">true</span></div><div class="line">&gt; {} === {}             <span class="comment">//js中不同的空对象引用不一样，请对比上者感受一下</span></div><div class="line"><span class="literal">false</span></div></pre></td></tr></table></figure>
+
+<p>再展示另一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="keyword">var</span> D = <span class="function"><span class="keyword">function</span><span class="params">(y)</span></span>{<span class="keyword">this</span>.desc = y;};   <span class="comment">//定义函数D</span></div><div class="line"></div><div class="line">&gt; D.prototype = a;           <span class="comment">//将D的prototype指向对象a</span></div><div class="line">{ name: <span class="string">'ima'</span> }</div><div class="line"></div><div class="line">&gt; <span class="keyword">var</span> d = <span class="keyword">new</span> D(<span class="string">'imd'</span>)      <span class="comment">//通过函数D创建对象d</span></div><div class="line">&gt; d</div><div class="line">{ desc: <span class="string">'imd'</span> }</div><div class="line"></div><div class="line">&gt; d.__proto__               <span class="comment">//对象d的原型就是对象a</span></div><div class="line">{ name: <span class="string">'ima'</span> }</div><div class="line">&gt; d.__proto__ === a</div><div class="line"><span class="literal">true</span></div><div class="line"></div><div class="line">&gt; d.name                    <span class="comment">//d"继承"了对象a的属性，实质是引用</span></div><div class="line"><span class="string">'ima'</span></div><div class="line">&gt; a.name = <span class="string">'iama!'</span>          <span class="comment">//更改a.name, d.name也发生了改变</span></div><div class="line">&gt; d.name                    <span class="comment">//具体可以查看Javascript原型链原理</span></div><div class="line"><span class="string">'iama!'</span></div><div class="line"></div><div class="line"><span class="comment">/* 需要注意的是：非函数对象是没有prototype属性的：*/</span></div><div class="line">&gt; a.prototype</div><div class="line"><span class="literal">undefined</span></div><div class="line">&gt; d.prototype</div><div class="line"><span class="literal">undefined</span></div><div class="line"></div><div class="line"><span class="comment">/* 而函数是有__proto__的，因为函数也是对象：*/</span></div><div class="line">&gt; A.__proto__</div><div class="line">[<span class="built_in">Function</span>: Empty]       <span class="comment">//函数的默认原型是空函数，正如对象的默认原型是空对象</span></div><div class="line">&gt; A.__proto__.toString()</div><div class="line"><span class="string">'function Empty() {}'</span></div></pre></td></tr></table></figure>
+
+<p>再次总结：<br><strong>protot</strong>指向对象的原型。<br>prototype是函数的属性，作为使用new创建的函数实例的原型。<br>建议阅读阮一峰的Javascript继承机制的设计思想，简单通俗地了解为什么Javascript采用prototype这种方式实现继承。<br>题外话：（关于constructor）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 对象a的构造函数是函数A */</span></div><div class="line">&gt; a.constructor.toString()</div><div class="line"><span class="string">'function (x){this.name = x;}'</span></div><div class="line">&gt; a.constructor === A</div><div class="line"><span class="literal">true</span></div><div class="line"></div><div class="line"><span class="comment">/* 因为A是一个函数对象，所以A的构造函数就是function的构造函数Function */</span></div><div class="line">&gt; A.constructor</div><div class="line">[<span class="built_in">Function</span>: <span class="built_in">Function</span>]</div><div class="line">&gt; A.constructor.toString()</div><div class="line"><span class="string">'function Function() { [native code] }'</span></div><div class="line">&gt; A.constructor === <span class="built_in">Function</span>.constructor</div><div class="line"><span class="literal">true</span></div><div class="line"><span class="comment">/* 函数A的原型(__protot__)就是它的构造函数（Function）的prototype */</span></div><div class="line">&gt; A.constructor === <span class="built_in">Function</span></div><div class="line"><span class="literal">true</span></div><div class="line">&gt; <span class="built_in">Function</span>.prototype</div><div class="line">[<span class="built_in">Function</span>: Empty]</div><div class="line">&gt; A.__proto__ === <span class="built_in">Function</span>.prototype</div><div class="line"><span class="literal">true</span></div><div class="line"></div><div class="line"><span class="comment">/* 但是 ！！！ */</span></div><div class="line"><span class="comment">/* 继承了对象a的d，它的构造函数不是D，而是A */</span></div><div class="line">&gt; d.constructor.toString()</div><div class="line"><span class="string">'function (x){this.name = x;}'</span></div><div class="line"></div><div class="line">&gt; d.constructor === a.constructor</div><div class="line"><span class="literal">true</span></div><div class="line"></div><div class="line">&gt; d.constructor === A</div><div class="line"><span class="literal">true</span></div></pre></td></tr></table></figure>
+
+<p>以上代码在Node.js v0.10.30环境下测试。<br><a href="http://shaopenghe.github.io/2014/07/12/javascript-prototype-protot.html" target="_blank" rel="external">引用地址</a><br><a href="http://www.cnblogs.com/snandy/archive/2012/09/01/2664134.html" target="_blank" rel="external">扩展阅读</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>首先，需要知道以下事实：<br>Javascript的继承是基于原型链模式的。<br>Javascript的原型是一个对象。<br>Javascript的继承本质是一（或多）个对象引用了另一个对象的属性和方法。<br>直接结论：<br><strong>proto</stro]]>
+    </summary>
+    
+      <category term="js" scheme="http://elevensky.github.io/tags/js/"/>
+    
+      <category term="前端" scheme="http://elevensky.github.io/categories/-categories-frontend/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[nodejs学习笔记]]></title>
+    <link href="http://elevensky.github.io/2015/03/23/nodejs%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>http://elevensky.github.io/2015/03/23/nodejs学习笔记/</id>
+    <published>2015-03-23T14:40:04.000Z</published>
+    <updated>2015-03-24T02:29:49.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="别被Express的API搞晕了">别被Express的API搞晕了</h2>
+<p>先来一段最简单的node版hello world</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span> <span class="params">(req, res)</span> </span>{</div><div class="line">    res.writeHead(<span class="number">200</span>, {<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span>});</div><div class="line">    res.end(<span class="string">'Hello World\n'</span>);</div><div class="line">}).listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>);</div></pre></td></tr></table></figure>
+
+<p>上面这段代码来自nodejs的官网，非常简单，就是来一个请求，就用传给createServer的匿名函数来处理请求。</p>
+<p>下面来看看使用Express的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> app = express();</div><div class="line"><span class="comment">//...中间忽略</span></div><div class="line">http.createServer(app).listen(app.get(<span class="string">'port'</span>), <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Express server listening on port '</span> + app.get(<span class="string">'port'</span>));</div><div class="line">});</div></pre></td></tr></table></figure>
+
+<p>对比可以看出，执行express()后，会返回一个函数，赋值给app，app的签名应该为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req,res)</span></span>{<span class="comment">//...}</span></div></pre></td></tr></table></figure>
+
+<p>然后请求都会被app这个函数处理（因为这个app是执行express后的结果，下面将不加区分的使用app和express两个词）。<br>另外一点最新的express中创建http服务器的过程已经封装到了如下代码中：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app.listen = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{</div><div class="line">  <span class="keyword">var</span> server = http.createServer(<span class="keyword">this</span>);</div><div class="line">  <span class="keyword">return</span> server.listen.apply(server, <span class="built_in">arguments</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
+
+<p>可以认为，在express内部，有一个函数的数组，暂时叫这个数组tasks，每来一个请求express内部会依次执行这个数组中的函数（这里说依次并不严谨，每个函数必须满足一定条件才行，这个后面说），应该可以想到，在这个函数数组里，每个函数的签名应该像下面那样</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req,res)</span></span>{<span class="comment">//...}</span></div></pre></td></tr></table></figure>
+
+<p>但是，实际上是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span><span class="params">(req,res，next)</span></span>{<span class="comment">//...}</span></div></pre></td></tr></table></figure>
+
+<p>这个next，是指下一个函数。后面我们会写一些试验来体验一下这个next，先总结一下：<br>对于一个典型的使用express的app.js（这个满大街都是代码，就不贴了），做了以下几件事</p>
+<ol>
+<li>导入相关模块</li>
+<li>执行过 var app = express() 后，使用app.set 设置express内部的一些参数（options）使用app.use 来注册函数，可以简单的认为是向那个（被我叫做）tasks的数组进行push操作</li>
+<li>通过http.createServer 用app来处理请求</li>
+</ol>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="别被Express的API搞晕了">别被Express的API搞晕了</h2>
+<p>先来一段最简单的node版hello world</p>
+<figure class="highlight javascript"><table><tr><td class="g]]>
+    </summary>
+    
+      <category term="nodejs" scheme="http://elevensky.github.io/tags/nodejs/"/>
+    
+      <category term="前端" scheme="http://elevensky.github.io/categories/-categories-frontend/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[]]></title>
+    <link href="http://elevensky.github.io/2015/03/12/nodejs%E6%A8%A1%E5%9D%97%E6%9C%BA%E5%88%B6/"/>
+    <id>http://elevensky.github.io/2015/03/12/nodejs模块机制/</id>
+    <published>2015-03-12T00:36:29.000Z</published>
+    <updated>2015-03-12T00:37:23.000Z</updated>
+    <content type="html"><![CDATA[<p>title: nodejs模块机制<br>date: 2015-03-12 08:36:29<br>categories:前端<br>tags:</p>
+<ul>
+<li>node<br>keywords:</li>
+</ul>
+<hr>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>title: nodejs模块机制<br>date: 2015-03-12 08:36:29<br>categories:前端<br>tags:</p>
+<ul>
+<li>node<br>keywords:</li>
+</ul>
+<hr>
+]]>
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[mac下安装启动mongodb]]></title>
+    <link href="http://elevensky.github.io/2015/03/05/mac%E4%B8%8B%E5%AE%89%E8%A3%85%E5%90%AF%E5%8A%A8mongodb/"/>
+    <id>http://elevensky.github.io/2015/03/05/mac下安装启动mongodb/</id>
+    <published>2015-03-04T17:10:48.000Z</published>
+    <updated>2015-03-04T17:25:03.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="Mac_OSX_10-9-4下使用Homebrew安装MongoDB">Mac OSX 10.9.4下使用Homebrew安装MongoDB</h2>
+<h3 id="安装Homebrew">安装Homebrew</h3>
+<p>Homebrew是Mac OSX下一个包依赖管理工具，用它来安装软件非常的方便只需要brew install 软件名这一条命令就可以将你所需要的软件安装好，不用再操心安装过程中软件的依赖问题，这些问题Homebrew统统帮你搞定，Homebrew的官网：<a href="http://brew.sh/" target="_blank" rel="external">http://brew.sh/</a> 在官网上对Homebrew的安装和用法有详细的描述这里就不多扯了。如果你还没有安装，还等什么赶紧动手安装吧！:]</p>
+<p>Homebrew安装方法也很简单：打开终端，然后输入命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby <span class="operator">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)</span>"</span></div></pre></td></tr></table></figure>
+
+<p>对，就是这么简单一条命令就可以将神器Homebrew安装好.</p>
+<p>安装MongoDB</p>
+<p>MongoDB是一个基于分布式文件存储的数据库。由C++语言编写。旨在为WEB应用提供可扩展的高性能数据存储解决方案。 MongoDB是一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。他支持的数据结构非常松散，是类似json的bson格式，因此可以存储比较复杂的数据类型。Mongo最大的特点是他支持的查询语言非常强大，其语法有点类似于面向对象的查询语言，几乎可以实现类似关系数据库单表查询的绝大部分功能，而且还支持对数据建立索引.</p>
+<p>进入正题开始用Homebrew安装主角MongoDB～～～</p>
+<p>在终端输入如下命令即可安装MongoDB</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew <span class="operator"><span class="keyword">install</span> mongodb</span></div></pre></td></tr></table></figure>
+
+<p>用Homebrew安装软件是不是很爽，耐心等待一会儿MongoDB就会安装好了……</p>
+<p>测试MongoDB是否安装成功</p>
+<p>在终端输入如下命令进行测试:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongod</div></pre></td></tr></table></figure>
+
+<p>mongod命令是用来启动MongoDB的服务的。</p>
+<h3 id="mongodb启动失败">mongodb启动失败</h3>
+<p>执行mongos命令后返回了一堆错误信息，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">mongod --help for help and startup options</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] MongoDB starting : pid=13117 port=27017  dbpath=/data/db 64-bit host=zhcmacbook-pro.local</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] db version v2.6.3</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] git version: nogitversion</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] build info: Darwin minimavericks.local 13.2.0  Darwin Kernel Version 13.2.0: Thu Apr 17 23:03:13 PDT 2014; root:xnu-2422.100.13~1/ RELEASE_X86_64 x86_64 BOOST_LIB_VERSION=1_49</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] allocator: tcmalloc</div><div class="line">2014-07-17T21:34:21.732+0800 [initandlisten] options: {}</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] exception in initAndListen: 10296</div><div class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></div><div class="line">  ERROR: dbpath (/data/db) does not exist.</div><div class="line">  Create this directory or give existing directory in --dbpath.</div><div class="line">  See http://dochub.mongodb.org/core/startingandstoppingmongo</div><div class="line"><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span></div><div class="line">, terminating</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] dbexit:</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: going to close listening sockets...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: going to flush diaglog...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: going to close sockets...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: waiting for fs preallocator...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: lock for final commit...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: final commit...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] shutdown: closing all files...</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] closeAllFiles() finished</div><div class="line">2014-07-17T21:34:21.733+0800 [initandlisten] dbexit: really exiting now</div></pre></td></tr></table></figure>
+
+<p>这么一堆错误信息，重点是这几句</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ERROR: dbpath (/data/db) does <span class="operator">not</span> exist. Create this <span class="built_in">directory</span> <span class="operator">or</span> give existing <span class="built_in">directory</span> <span class="operator">in</span> –dbpath. See <span class="keyword">http</span>://dochub.mongodb.org/core/startingandstoppingmongo</div></pre></td></tr></table></figure>
+
+<p>错误信息的意思是dbpath (/data/db)不存在，需要创建/data/db这个目录或者使用—dbpath参数项指定一个已经存在的目录。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">dbpath</span> (/<span class="typedef"><span class="keyword">data</span>/db)这个目录是用来存储<span class="type">MongoDB</span>数据文件的地方</span></div></pre></td></tr></table></figure>
+
+<p>既然不存在/data/db那我们就创建这个目录</p>
+<p>首先在终端输入cd /命令返回到磁盘根目录</p>
+<p>然后输入mkdir -p /data/db创建/data/db</p>
+<p>再次输入mongos命令启动MongoDB的服务，服务又退出了返回一堆信息如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mongod <span class="comment">--help for help and startup options</span></div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] MongoDB starting : pid=21182 port=27017  dbpath=/data/db 64-bit host=zhcmacbook-pro.local</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] db version v2.6.3</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] git version: nogitversion</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] build info: Darwin minimavericks.local 13.2.0  Darwin Kernel Version 13.2.0: Thu Apr 17 23:03:13 PDT 2014; root:xnu-2422.100.13~1/ RELEASE_X86_64 x86_64 BOOST_LIB_VERSION=1_49</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] allocator: tcmalloc</div><div class="line">2014-07-17T23:56:40.285+0800 [initandlisten] options: {}</div><div class="line">2014-07-17T23:56:40.287+0800 [initandlisten] exception in initAndListen: 10309 Unable to  <span class="operator"><span class="keyword">create</span>/<span class="keyword">open</span> <span class="keyword">lock</span> file: /<span class="keyword">data</span>/db/mongod.<span class="keyword">lock</span> errno:<span class="number">13</span> Permission denied <span class="keyword">Is</span> a mongod  instance already running?, terminating</span></div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] dbexit:</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: going <span class="keyword">to</span> <span class="keyword">close</span> listening sockets...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: going <span class="keyword">to</span> <span class="keyword">flush</span> diaglog...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: going <span class="keyword">to</span> <span class="keyword">close</span> sockets...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: waiting <span class="keyword">for</span> fs preallocator...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: <span class="keyword">lock</span> <span class="keyword">for</span> final <span class="keyword">commit</span>...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: final <span class="keyword">commit</span>...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.287</span>+<span class="number">0800</span> [initandlisten] shutdown: closing <span class="keyword">all</span> files...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.288</span>+<span class="number">0800</span> [initandlisten] closeAllFiles() finished</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.288</span>+<span class="number">0800</span> [initandlisten] shutdown: removing fs <span class="keyword">lock</span>...</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">17</span>T23:<span class="number">56</span>:<span class="number">40.288</span>+<span class="number">0800</span> [initandlisten] couldn<span class="string">'t remove fs lock errno:9 Bad file   descriptor</span></div><div class="line">2014-07-17T23:56:40.288+0800 [initandlisten] dbexit: really exiting now</div></pre></td></tr></table></figure>
+
+<p>出错原因是这几句log</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="operator"><span class="keyword">create</span>/<span class="keyword">open</span> <span class="keyword">lock</span> file: /<span class="keyword">data</span>/db/mongod.<span class="keyword">lock</span> errno:<span class="number">13</span> Permission denied <span class="keyword">Is</span> a mongod  instance already running?, terminating</span></div></pre></td></tr></table></figure>
+
+<p>意思是不创建和打开/data/db/mongod.lock这个文件，原因是Permission denied（权限拒绝），看来是当前用户执行mongod这个命令时，对/data/db这个目录没有操作权限，OK，知道原因就好办了，给/data/db加上权限。</p>
+<p>在终端输入如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">sudo</span> chown -<span class="type">R</span>  当前登录的用户名 /<span class="typedef"><span class="keyword">data</span></span></div></pre></td></tr></table></figure>
+
+<p>再次在终端输入 <strong>mongod</strong> 启动MongoDB的服务，返回如下信息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mongod <span class="comment">--help for help and startup options</span></div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] MongoDB starting : pid=<span class="number">22420</span> port=<span class="number">27017</span>  dbpath=/data/db <span class="number">64</span>-bit host=zhcmacbook-pro.<span class="built_in">local</span></div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] db <span class="built_in">version</span> v2<span class="number">.6</span><span class="number">.3</span></div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] git <span class="built_in">version</span>: nogitversion</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] build info: Darwin minimavericks.<span class="built_in">local</span> <span class="number">13.2</span><span class="number">.0</span>  Darwin Kernel Version <span class="number">13.2</span><span class="number">.0</span>: Thu Apr <span class="number">17</span> <span class="number">23</span>:<span class="number">03</span>:<span class="number">13</span> PDT <span class="number">2014</span>; root:xnu-<span class="number">2422.100</span><span class="number">.13</span>~<span class="number">1</span>/ RELEASE_X86_64 x86_64 BOOST_LIB_VERSION=<span class="number">1</span>_49</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.286</span>+<span class="number">0800</span> [initandlisten] allocator: tcmalloc</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.287</span>+<span class="number">0800</span> [initandlisten] options: {}</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.288</span>+<span class="number">0800</span> [initandlisten] journal dir=/data/db/journal</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.288</span>+<span class="number">0800</span> [initandlisten] recover : no journal <span class="built_in">files</span> present, no   recovery needed</div><div class="line"><span class="number">2014</span>-<span class="number">07</span>-<span class="number">18</span>T01:<span class="number">29</span>:<span class="number">23.437</span>+<span class="number">0800</span> [initandlisten] waiting <span class="keyword">for</span> connections <span class="command"><span class="keyword">on</span> <span class="title">port</span> <span class="title">27017</span></span></div></pre></td></tr></table></figure>
+
+<p>终于启动成功了，然后再打开一个新的终端窗口输入 <strong>mongo</strong> 命令，返回如下信息：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">~ $ mongo</div><div class="line">MongoDB <span class="built_in">shell</span> <span class="built_in">version</span>: <span class="number">2.6</span><span class="number">.3</span></div><div class="line">connecting <span class="built_in">to</span>: test</div><div class="line">Welcome <span class="built_in">to</span> <span class="operator">the</span> MongoDB <span class="built_in">shell</span>.</div><div class="line">For interactive help, type <span class="string">"help"</span>.</div><div class="line">For more comprehensive documentation, see</div><div class="line"><span class="keyword">http</span>://docs.mongodb.org/</div><div class="line">Questions? Try <span class="operator">the</span> support group</div><div class="line"><span class="keyword">http</span>://groups.google.com/group/mongodb-user</div><div class="line">&gt;</div></pre></td></tr></table></figure>
+
+<p>哦耶！，成功进入MongoDB的命令行模式，到这里MongoDB就安装好了！:] :] :]……</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="Mac_OSX_10-9-4下使用Homebrew安装MongoDB">Mac OSX 10.9.4下使用Homebrew安装MongoDB</h2>
+<h3 id="安装Homebrew">安装Homebrew</h3>
+<p>Homebrew是Mac OSX下]]>
+    </summary>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[js继承机制]]></title>
+    <link href="http://elevensky.github.io/2015/02/27/js%E7%BB%A7%E6%89%BF%E6%9C%BA%E5%88%B6/"/>
+    <id>http://elevensky.github.io/2015/02/27/js继承机制/</id>
+    <published>2015-02-27T11:39:04.000Z</published>
+    <updated>2015-02-27T11:42:36.000Z</updated>
+    <content type="html"><![CDATA[<p>js的继承机制到底是什么。<br>即便如“阮一峰”老师这样的大牛，也不禁发出这样的感叹</p>
+<p><strong>我花了很多时间，学习这个部分，还做了很多笔记。但是都属于强行记忆，无法从根本上理解。</strong></p>
+<p>作为愚钝如我等码农，也是搞的头晕脑胀，基本理念看了很多材料也翻得差不多，但这杯水还是有点混，没有如自己瓶装的矿泉水那么清澈通透。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>js的继承机制到底是什么。<br>即便如“阮一峰”老师这样的大牛，也不禁发出这样的感叹</p>
+<p><strong>我花了很多时间，学习这个部分，还做了很多笔记。但是都属于强行记忆，无法从根本上理解。</strong></p>
+<p>作为愚钝如我等码农，也是搞的头晕脑胀，]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[你是否强大到不需要信仰]]></title>

@@ -4,17 +4,15 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>nodejs中exports和module.exports区别 | 程序员的多肉花园</title>
+    <title>简析Javascript的prototype和__proto__ | 程序员的多肉花园</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="elevensky">
     
-    <meta name="description" content="Node.js中exports和module.exports有什么不同？
-你肯定对Node.js模块中用来创建函数的exports对象很熟悉（假设一个名为rocker.js的文件）：
-1234exports.name = function() {    console.log(&#39;My name is Lemmy Kilmister&#39;);};">
+    <meta name="description" content="首先，需要知道以下事实：Javascript的继承是基于原型链模式的。Javascript的原型是一个对象。Javascript的继承本质是一（或多）个对象引用了另一个对象的属性和方法。直接结论：proto 是对象的一个内部隐藏属性，它的值是该对象的原型。prototype 是函数对象的一个属性，它">
     
     
-      <meta name="keywords" content="exports,module.exports,Web,前端,JavaScript,html5,css3">
+      <meta name="keywords" content="express,Web,前端,JavaScript,html5,css3">
     
     
     
@@ -71,15 +69,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/02/25/nodejs中exports和module-exports区别/" title="nodejs中exports和module.exports区别" itemprop="url">nodejs中exports和module.exports区别</a>
+      <a href="/2015/03/24/简析Javascript的prototype和__proto__/" title="简析Javascript的prototype和__proto__" itemprop="url">简析Javascript的prototype和__proto__</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://elevensky.github.io" title="elevensky">elevensky</a>
     </p>
   <p class="article-time">
-    <time datetime="2015-02-25T06:36:22.000Z" itemprop="datePublished">2月 25 2015</time>
-    更新日期:<time datetime="2015-02-25T07:01:36.000Z" itemprop="dateModified">2月 25 2015</time>
+    <time datetime="2015-03-24T02:40:04.000Z" itemprop="datePublished">3月 24 2015</time>
+    更新日期:<time datetime="2015-03-24T03:29:51.000Z" itemprop="dateModified">3月 24 2015</time>
     
   </p>
 </header>
@@ -88,54 +86,26 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js中exports和module-exports有什么不同？"><span class="toc-number">1.</span> <span class="toc-text">Node.js中exports和module.exports有什么不同？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转载"><span class="toc-number">2.</span> <span class="toc-text">转载</span></a></li></ol>
+		
 		</div>
 		
-		<h2 id="Node-js中exports和module-exports有什么不同？">Node.js中exports和module.exports有什么不同？</h2>
-<p>你肯定对Node.js模块中用来创建函数的exports对象很熟悉（假设一个名为rocker.js的文件）：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
+		<p>首先，需要知道以下事实：<br>Javascript的继承是基于原型链模式的。<br>Javascript的原型是一个对象。<br>Javascript的继承本质是一（或多）个对象引用了另一个对象的属性和方法。<br>直接结论：<br><strong>proto</strong> 是对象的一个内部隐藏属性，它的值是该对象的原型。<br>prototype 是函数对象的一个属性，它的值是一个对象（默认为 {} ），当该函数用作构造函数时，新创建对象的原型（<strong>proto</strong>）将指向该属性值。<br>好，show you the code:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="keyword">var</span> A = <span class="function"><span class="keyword">function</span><span class="params">(x)</span></span>{<span class="keyword">this</span>.name = x;};   <span class="comment">//定义函数 A</span></div><div class="line">&gt; <span class="keyword">var</span> a = <span class="keyword">new</span> A(<span class="string">'ima'</span>);     <span class="comment">// 通过函数A创建对象a</span></div><div class="line">&gt; a</div><div class="line">{ name: <span class="string">'ima'</span> }</div><div class="line"></div><div class="line">&gt; A.prototype       <span class="comment">//因为A.prototype默认是 {}</span></div><div class="line">{}</div><div class="line">&gt; a.__proto__       <span class="comment">//所以对象a的原型（__proto__）就是 {}</span></div><div class="line">{}</div><div class="line">&gt; A.prototype === a.__proto__   <span class="comment">//它们都是指向同一个 {}</span></div><div class="line"><span class="literal">true</span></div><div class="line">&gt; {} === {}             <span class="comment">//js中不同的空对象引用不一样，请对比上者感受一下</span></div><div class="line"><span class="literal">false</span></div></pre></td></tr></table></figure>
 
-<a id="more"></a>
-<p>然后你在另一个文件中调用：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line">rocker.name(); <span class="comment">// 'My name is Lemmy Kilmister'</span></div></pre></td></tr></table></figure>
+<p>再展示另一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&gt; <span class="keyword">var</span> D = <span class="function"><span class="keyword">function</span><span class="params">(y)</span></span>{<span class="keyword">this</span>.desc = y;};   <span class="comment">//定义函数D</span></div><div class="line"></div><div class="line">&gt; D.prototype = a;           <span class="comment">//将D的prototype指向对象a</span></div><div class="line">{ name: <span class="string">'ima'</span> }</div><div class="line"></div><div class="line">&gt; <span class="keyword">var</span> d = <span class="keyword">new</span> D(<span class="string">'imd'</span>)      <span class="comment">//通过函数D创建对象d</span></div><div class="line">&gt; d</div><div class="line">{ desc: <span class="string">'imd'</span> }</div><div class="line"></div><div class="line">&gt; d.__proto__               <span class="comment">//对象d的原型就是对象a</span></div><div class="line">{ name: <span class="string">'ima'</span> }</div><div class="line">&gt; d.__proto__ === a</div><div class="line"><span class="literal">true</span></div><div class="line"></div><div class="line">&gt; d.name                    <span class="comment">//d"继承"了对象a的属性，实质是引用</span></div><div class="line"><span class="string">'ima'</span></div><div class="line">&gt; a.name = <span class="string">'iama!'</span>          <span class="comment">//更改a.name, d.name也发生了改变</span></div><div class="line">&gt; d.name                    <span class="comment">//具体可以查看Javascript原型链原理</span></div><div class="line"><span class="string">'iama!'</span></div><div class="line"></div><div class="line"><span class="comment">/* 需要注意的是：非函数对象是没有prototype属性的：*/</span></div><div class="line">&gt; a.prototype</div><div class="line"><span class="literal">undefined</span></div><div class="line">&gt; d.prototype</div><div class="line"><span class="literal">undefined</span></div><div class="line"></div><div class="line"><span class="comment">/* 而函数是有__proto__的，因为函数也是对象：*/</span></div><div class="line">&gt; A.__proto__</div><div class="line">[<span class="built_in">Function</span>: Empty]       <span class="comment">//函数的默认原型是空函数，正如对象的默认原型是空对象</span></div><div class="line">&gt; A.__proto__.toString()</div><div class="line"><span class="string">'function Empty() {}'</span></div></pre></td></tr></table></figure>
 
-<p>但是module.exports到底是个什么玩意儿? 它合法吗？</p>
-<p>令人吃惊的是- <em>module.exports</em> 是真实存在的东西。exports只是module.exports的辅助方法。你的模块最终返回module.exports给调用者，而不是exports。exports所做的事情是收集属性，如果module.exports当前没有任何属性的话，exports会把这些属性赋予module.exports。如果module.exports已经存在一些属性的话，那么exports中所用的东西都会被忽略。</p>
-<p>把下面的内容放到rocker.js:</p>
-<p>module.exports = ‘ROCK IT!’;<br>exports.name = function() {<br>    console.log(‘My name is Lemmy Kilmister’);<br>};<br>然后把下面的内容放到另一个文件中，执行它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line">rocker.name(); <span class="comment">// TypeError: Object ROCK IT! has no method 'name'</span></div></pre></td></tr></table></figure>
+<p>再次总结：<br><strong>protot</strong>指向对象的原型。<br>prototype是函数的属性，作为使用new创建的函数实例的原型。<br>建议阅读阮一峰的Javascript继承机制的设计思想，简单通俗地了解为什么Javascript采用prototype这种方式实现继承。<br>题外话：（关于constructor）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* 对象a的构造函数是函数A */</span></div><div class="line">&gt; a.constructor.toString()</div><div class="line"><span class="string">'function (x){this.name = x;}'</span></div><div class="line">&gt; a.constructor === A</div><div class="line"><span class="literal">true</span></div><div class="line"></div><div class="line"><span class="comment">/* 因为A是一个函数对象，所以A的构造函数就是function的构造函数Function */</span></div><div class="line">&gt; A.constructor</div><div class="line">[<span class="built_in">Function</span>: <span class="built_in">Function</span>]</div><div class="line">&gt; A.constructor.toString()</div><div class="line"><span class="string">'function Function() { [native code] }'</span></div><div class="line">&gt; A.constructor === <span class="built_in">Function</span>.constructor</div><div class="line"><span class="literal">true</span></div><div class="line"><span class="comment">/* 函数A的原型(__protot__)就是它的构造函数（Function）的prototype */</span></div><div class="line">&gt; A.constructor === <span class="built_in">Function</span></div><div class="line"><span class="literal">true</span></div><div class="line">&gt; <span class="built_in">Function</span>.prototype</div><div class="line">[<span class="built_in">Function</span>: Empty]</div><div class="line">&gt; A.__proto__ === <span class="built_in">Function</span>.prototype</div><div class="line"><span class="literal">true</span></div><div class="line"></div><div class="line"><span class="comment">/* 但是 ！！！ */</span></div><div class="line"><span class="comment">/* 继承了对象a的d，它的构造函数不是D，而是A */</span></div><div class="line">&gt; d.constructor.toString()</div><div class="line"><span class="string">'function (x){this.name = x;}'</span></div><div class="line"></div><div class="line">&gt; d.constructor === a.constructor</div><div class="line"><span class="literal">true</span></div><div class="line"></div><div class="line">&gt; d.constructor === A</div><div class="line"><span class="literal">true</span></div></pre></td></tr></table></figure>
 
-<p>rocker模块完全忽略了exports.name，然后返回了一个字符串’ROCK IT!’。通过上面的例子，你可能认识到你的模块不一定非得是模块实例（module instances）。你的模块可以是任何合法的JavaScript对象 - boolean，number，date，JSON， string，function，array和其他。你的模块可以是任何你赋予module.exports的值。如果你没有明确的给module.exports设置任何值，那么exports中的属性会被赋给module.exports中，然后并返回它。</p>
-<p>在下面的情况下，你的模块是一个类：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span><span class="params">(name, age)</span> </span>{</div><div class="line">    <span class="keyword">this</span>.name = name;</div><div class="line">    <span class="keyword">this</span>.age = age;</div><div class="line">    <span class="keyword">this</span>.about = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>.name +<span class="string">' is '</span>+ <span class="keyword">this</span>.age +<span class="string">' years old'</span>);</div><div class="line">    };</div><div class="line">};</div></pre></td></tr></table></figure>
-
-<p>然后你应该这样使用它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">var</span> Rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line"><span class="keyword">var</span> r = <span class="keyword">new</span> Rocker(<span class="string">'Ozzy'</span>, <span class="number">62</span>);</div><div class="line">r.about(); <span class="comment">// Ozzy is 62 years old</span></div></pre></td></tr></table></figure>
-
-<p>在下面的情况下，你的模块是一个数组：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = [<span class="string">'Lemmy Kilmister'</span>, <span class="string">'Ozzy Osbourne'</span>, <span class="string">'Ronnie James Dio'</span>, <span class="string">'Steven Tyler'</span>, <span class="string">'Mick Jagger'</span>];</div></pre></td></tr></table></figure>
-
-<p>然后你应该这样使用它：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> rocker = <span class="built_in">require</span>(<span class="string">'./rocker.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'Rockin in heaven: '</span> + rocker[<span class="number">2</span>]); <span class="comment">//Rockin in heaven: Ronnie James Dio</span></div></pre></td></tr></table></figure>
-
-<p>现在你应该找到要点了 - 如果你想要你的模块成为一个特别的对象类型，那么使用module.exports；如果你希望你的模块成为一个传统的模块实例（module instance），使用exports。</p>
-<p>把属性赋予module.exports的结果与把属性赋予给exports是一样的。看下面这个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="built_in">module</span>.exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
-
-<p>下面这个做的是一样的事情：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">exports.name = <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>{</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'My name is Lemmy Kilmister'</span>);</div><div class="line">};</div></pre></td></tr></table></figure>
-
-<p>但是请注意，它们并不是一样的东西。就像我之前说的module.exports是真实存在的东西，exports只是它的辅助方法。话虽如此，exports还是推荐的对象，除非你想把你模块 的对象类型从传统的模块实例（module instance）修改为其他的。</p>
-<p>希望这篇文章能帮助你理解exports和module.exports之间的不同，并且能进一步的理解模块在Node.js中是怎么工作的。</p>
-<h2 id="转载">转载</h2>
-<p><em>转载地址</em> ：<a href="http://weizhifeng.net/node-js-exports-vs-module-exports.html" target="_blank" rel="external">http://weizhifeng.net/node-js-exports-vs-module-exports.html</a><br><em>英文原址</em> ：<a href="http://www.hacksparrow.com/node-js-exports-vs-module-exports.html" target="_blank" rel="external">http://www.hacksparrow.com/node-js-exports-vs-module-exports.html</a></p>
+<p>以上代码在Node.js v0.10.30环境下测试。<br><a href="http://shaopenghe.github.io/2014/07/12/javascript-prototype-protot.html" target="_blank" rel="external">引用地址</a><br><a href="http://www.cnblogs.com/snandy/archive/2012/09/01/2664134.html" target="_blank" rel="external">扩展阅读</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/nodejs/">nodejs</a>
+  <span></span> <a href="/tags/js/">js</a>
   </div>
 
 
@@ -148,7 +118,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://elevensky.github.io/2015/02/25/nodejs中exports和module-exports区别/" data-title="nodejs中exports和module.exports区别 | 程序员的多肉花园" data-tsina="null" class="share clearfix">
+  <div data-url="http://elevensky.github.io/2015/03/24/简析Javascript的prototype和__proto__/" data-title="简析Javascript的prototype和__proto__ | 程序员的多肉花园" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -158,18 +128,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2015/02/25/你是否强大到不需要信仰/" title="你是否强大到不需要信仰">
+ <a href="/2015/03/31/what-is-this/" title="what is &#39;this&#39;?">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  你是否强大到不需要信仰</span>
+  what is &#39;this&#39;?</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2015/02/25/nodejs基础教程/"  title="Node.js 概述">
+<a href="/2015/03/23/nodejs学习笔记/"  title="nodejs学习笔记">
  <strong>NEXT:</strong><br/> 
- <span>Node.js 概述
+ <span>nodejs学习笔记
 </span>
 </a>
 </div>
@@ -179,7 +149,7 @@
 	
 <section id="comment">
   <h1 class="title">文章评论</h1>
-  <div class="ds-thread" data-thread-key="2015/02/25/nodejs中exports和module-exports区别/" data-title="nodejs中exports和module.exports区别" data-url="http://elevensky.github.io/2015/02/25/nodejs中exports和module-exports区别/"></div>
+  <div class="ds-thread" data-thread-key="2015/03/24/简析Javascript的prototype和__proto__/" data-title="简析Javascript的prototype和__proto__" data-url="http://elevensky.github.io/2015/03/24/简析Javascript的prototype和__proto__/"></div>
 </section>
 
 
@@ -188,7 +158,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Node-js中exports和module-exports有什么不同？"><span class="toc-number">1.</span> <span class="toc-text">Node.js中exports和module.exports有什么不同？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#转载"><span class="toc-number">2.</span> <span class="toc-text">转载</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">
